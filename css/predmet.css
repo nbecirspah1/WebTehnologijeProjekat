@@ -1,7 +1,10 @@
 body{
-    background-color: lightsteelblue;
-  /*  darkturquoise;*/
-    color: darkslategrey;
+  background-color:lightsteelblue; /*darkturquoise;*/
+  color: darkslategrey;
+}
+#myHeader{
+  position: sticky;
+  top: 0;
 }
 
 #myHeader>ul{
@@ -9,7 +12,7 @@ body{
     float: left;
 
   }
-
+  
   article{
     clear: both;
   }
@@ -18,7 +21,7 @@ body{
     text-align: center;
   }
   
-  .bsc_1{
+  .bsc_1, .bsc_2, .bsc_3, .msc_1{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     padding: 10px;
@@ -31,6 +34,22 @@ body{
     font-size: 30px;
     text-align: center;
     background-color: rgba(255, 255, 255, 0.8);
+  }
+  .izborniPredmet{
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+    background-color: powderblue;
+  }
+
+  .nijeNaOvojGodini{
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+    background-color: gray;
+    
   }
 
   .gridNaslov{
