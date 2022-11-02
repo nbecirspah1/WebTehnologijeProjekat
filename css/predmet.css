@@ -21,7 +21,7 @@ body{
     text-align: center;
   }
   
-  .bsc_1, .bsc_2, .bsc_3, .msc_1{
+  .bsc_1, .bsc_2, .bsc_3, .msc_1, .msc_2{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     padding: 10px;
