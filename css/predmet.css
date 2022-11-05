@@ -2,21 +2,30 @@ body{
   background-color:lightsteelblue; /*darkturquoise;*/
   color: darkslategrey;
 }
+@media screen and (max-width: 800px) {
+  #myHeader{
+    width: 100%;
+    top: 0;
+    background-color: lightsteelblue;  
+  }
+  #myHeader>ul{
+    list-style-type: none; 
+  }
+}
+@media screen and (min-width: 800px) {
+
 #myHeader{
   width: 100%;
-  position: fixed;
   top: 0;
   background-color: lightsteelblue;
- 
-  
+  position: fixed;
+}
+#myHeader>ul{
+  list-style-type: none;
+  float: left;
+}
 }
 
-#myHeader>ul{
-    list-style-type: none;
-    float: left;
-    
-
-  }
   
   article{
     clear: both;
@@ -28,6 +37,8 @@ body{
     text-align: center;
 
   }
+  
+  @media screen and (min-width: 300px) {
   .rs_1, .rs_2, .bsc_1, .bsc_2, .bsc_3, .msc_1, .msc_2{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -37,13 +48,21 @@ body{
     justify-content: center;
     align-content: center;
   }
+}
+@media screen and (max-width: 300px) {
+  .rs_1, .rs_2, .bsc_1, .bsc_2, .bsc_3, .msc_1, .msc_2{
+    display: grid;
+    padding: 10px;
+    column-gap: 10px;
+    row-gap: 1em;
+  }
+}
+
   .gridNaslov {
     border-radius: 10px;
     padding: 20px;
-    font-size: 30px;
     text-align: center;
     background-color: rgba(255, 255, 255, 0.8);
-    grid-template-columns: repeat(auto-fit, minmax(auto, 1fr));
     margin-top: 30px;
 
   }
