@@ -3,42 +3,61 @@ body{
   color: darkslategrey;
 }
 #myHeader{
-  position: sticky;
+  width: 100%;
+  position: fixed;
   top: 0;
+  background-color: lightsteelblue;
+ 
+  
 }
 
 #myHeader>ul{
     list-style-type: none;
     float: left;
+    
 
   }
   
   article{
     clear: both;
+    margin-top: 10%;
+    align-items: center;
   }
 
   article>div>h1{
     text-align: center;
+
   }
-  
-  .bsc_1, .bsc_2, .bsc_3, .msc_1, .msc_2{
+  .rs_1, .rs_2, .bsc_1, .bsc_2, .bsc_3, .msc_1, .msc_2{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     padding: 10px;
     column-gap: 10px;
     row-gap: 1em;
+    justify-content: center;
+    align-content: center;
   }
-  .obavezniPredmet, .gridNaslov {
+  .gridNaslov {
     border-radius: 10px;
     padding: 20px;
     font-size: 30px;
     text-align: center;
     background-color: rgba(255, 255, 255, 0.8);
+    grid-template-columns: repeat(auto-fit, minmax(auto, 1fr));
+    margin-top: 30px;
+
   }
+    .obavezniPredmet{
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    
+  }
+
   .izborniPredmet{
     border-radius: 10px;
     padding: 20px;
-    font-size: 30px;
     text-align: center;
     background-color: powderblue;
   }
@@ -46,14 +65,12 @@ body{
   .nijeNaOvojGodini{
     border-radius: 10px;
     padding: 20px;
-    font-size: 30px;
     text-align: center;
     background-color: gray;
     
   }
 
-  .gridNaslov{
-    grid-column-start: 1;
-    grid-column-end: 4;
+  [id]{
+    scroll-margin-top: 100px;
   }
 
