@@ -1,0 +1,59 @@
+h1{
+    font-size: 30pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+h2, h3{
+    font-size: 20pt;
+    text-align: center;
+
+}
+
+td, th {
+    border: 2px solid;
+    border-style: solid;
+    min-width: 20px;
+}
+
+table{
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+th{
+    height: 30px;
+    width: 10px;
+    padding: 10px;
+    vertical-align: top;
+    text-align: left;
+    font-size: 15pt;
+
+}
+tr{
+    
+    vertical-align: top;
+    text-align: left;
+    height: 2cm;
+}
+
+td{
+    padding: 10px;
+}
+
+.vertikalno{
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+}
+
+.crvena{
+    background-color: red;
+}
+
+.zelena{
+    background-color: green;
+}
+
+.osmaKolona{
+    width: 300px;
+}

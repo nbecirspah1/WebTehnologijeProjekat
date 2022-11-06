@@ -1,45 +1,60 @@
-body{
-  background-color:lightsteelblue; /*darkturquoise;*/
+body {
+  background-color: lightsteelblue;
+  /*darkturquoise;*/
   color: darkslategrey;
+  min-width: 300px;
 }
+
 @media screen and (max-width: 800px) {
-  #myHeader{
+  #myHeader {
     width: 100%;
     top: 0;
-    background-color: lightsteelblue;  
+    background-color: lightsteelblue;
   }
-  #myHeader>ul{
-    list-style-type: none; 
+
+  #myHeader>ul {
+    list-style-type: none;
   }
 }
+
 @media screen and (min-width: 800px) {
-
-#myHeader{
-  width: 100%;
-  top: 0;
-  background-color: lightsteelblue;
-  position: fixed;
-}
-#myHeader>ul{
-  list-style-type: none;
-  float: left;
-}
-}
-
-  
-  article{
-    clear: both;
-    margin-top: 10%;
-    align-items: center;
+  #myHeader {
+    width: 100%;
+    top: 0;
+    background-color: lightsteelblue;
+    position: fixed;
   }
 
-  article>div>h1{
-    text-align: center;
-
+  #myHeader>ul {
+    list-style-type: none;
+    float: left;
   }
-  
-  @media screen and (min-width: 300px) {
-  .rs_1, .rs_2, .bsc_1, .bsc_2, .bsc_3, .msc_1, .msc_2{
+
+  [id] {
+    scroll-margin-top: 100px;
+  }
+}
+
+
+article {
+  clear: both;
+  margin-top: 10%;
+  align-items: center;
+}
+
+article>div>h1 {
+  text-align: center;
+  font-size: 40pt;
+}
+
+@media screen and (min-width: 300px) {
+  .rs_1,
+  .rs_2,
+  .bsc_1,
+  .bsc_2,
+  .bsc_3,
+  .msc_1,
+  .msc_2 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     padding: 10px;
@@ -49,47 +64,57 @@ body{
     align-content: center;
   }
 }
+
+@media screen and (min-width: 300px) and (max-width: 800px) {
+  [id] {
+    scroll-margin-top: 20px;
+  }
+}
+
 @media screen and (max-width: 300px) {
-  .rs_1, .rs_2, .bsc_1, .bsc_2, .bsc_3, .msc_1, .msc_2{
+  .rs_1,
+  .rs_2,
+  .bsc_1,
+  .bsc_2,
+  .bsc_3,
+  .msc_1,
+  .msc_2 {
     display: grid;
     padding: 10px;
     column-gap: 10px;
     row-gap: 1em;
   }
+
+  [id] {
+    scroll-margin-top: 10px;
+  }
 }
 
-  .gridNaslov {
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    background-color: rgba(255, 255, 255, 0.8);
-    margin-top: 30px;
+.gridNaslov {
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  margin-top: 30px;
+}
 
-  }
-    .obavezniPredmet{
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    background-color: rgba(255, 255, 255, 0.8);
-    
-  }
+.obavezniPredmet {
+  background-color: rgba(255, 255, 255, 0.8);
+}
 
-  .izborniPredmet{
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    background-color: powderblue;
-  }
+.izborniPredmet {
+  background-color: powderblue;
+}
 
-  .nijeNaOvojGodini{
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    background-color: gray;
-    
-  }
+.nijeNaOvojGodini {
+  background-color: gray;
+}
 
-  [id]{
-    scroll-margin-top: 100px;
-  }
+.obavezniPredmet,
+.izborniPredmet,
+.nijeNaOvojGodini {
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
 
