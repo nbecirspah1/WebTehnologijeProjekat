@@ -4,6 +4,12 @@ h1{
     text-align: center;
 }
 
+
+div{
+    overflow-x: auto;
+    display: flex;
+}
+
 h2, h3{
     font-size: 20pt;
     text-align: center;
@@ -11,19 +17,20 @@ h2, h3{
 }
 
 td, th {
-    border: 2px solid;
+    
     border-style: solid;
-    min-width: 20px;
+    min-width: 2%;
 }
 
 table{
     border-collapse: collapse;
     margin-left: auto;
+    display: flex;
     margin-right: auto;
 }
 th{
-    height: 30px;
-    width: 10px;
+    height: 3%;
+    width: 1%;
     padding: 10px;
     vertical-align: top;
     text-align: left;
@@ -54,6 +61,20 @@ td{
     background-color: green;
 }
 
-.osmaKolona{
-    width: 300px;
+.bijela{
+    background-color: white;
+}
+
+.prazna{
+    border-bottom: 2px solid black;
+    border-right: 0;
+    border-top: 0;
+    border-left: 0;
+}
+
+.zadnja{
+    border-bottom: 2px solid black;
+    border-right: 2px solid black;
+    border-top: 0;
+    border-left: 0;
 }
