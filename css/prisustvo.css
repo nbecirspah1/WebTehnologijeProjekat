@@ -84,3 +84,8 @@ td{
     border-top: 0;
     border-left: 0;
 }
+
+#dugme1, #dugme2{
+    padding-left: 10%;
+    padding-right: 10%;
+}
