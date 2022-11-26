@@ -84,4 +84,42 @@ let TabelaPrisustvo = function(divRef, podaci){
     }
    }
 
+ 
+    for(let i = 0; i < podaci.studenti.length; i++){//Ovom for petljom prolazimo kroz sve studente i
+                                                    //upisujemo njihova imena i indekse
+        let red = tabela.appendChild(document.createElement('tr'));
+        let red1 = tabela.appendChild(document.createElement('tr'));
+        let kolona1 =red.appendChild(document.createElement('td'));
+        kolona1.rowSpan = "2";
+        kolona1.innerHTML = podaci.studenti[i].ime;
+        let kolona2 = red.appendChild(document.createElement('td'));
+        kolona2.rowSpan = "2";
+        kolona2.innerHTML =  podaci.studenti[i].index;  
+        
+        let praznaCelija=true;
+        let sedmica = 1;
+        for(let j = 0; j < podaci.prisustva.length; j++){//Prolazimo kroz prisustva i za tekuceg studenta sa
+                                                        //odredjenim brojem indeksa upisujemo prisustvo
+            if(sedmica != tekucaSedmica){  
+                if(podaci.studenti[i].index == podaci.prisustva[j].index && podaci.prisustva[j].sedmica == sedmica){
+                    let kolona = red.appendChild(document.createElement('td'));
+                    kolona.rowSpan = "2";
+                    kolona.innerHTML = ((podaci.prisustva[j].predavanja + podaci.prisustva[j].vjezbe)/
+                    (podaci.brojPredavanjaSedmicno +  podaci.brojVjezbiSedmicno))*100 + '%';
+                    sedmica = sedmica + 1;
+                    j=-1;
+                }
+                else if(j == podaci.prisustva.length -1){
+                    let kolona = red.appendChild(document.createElement('td'));
+                    kolona.rowSpan = "2";
+                    sedmica = sedmica + 1;
+                    j=-1;
+                }
+            
+            }
+
+            
+        }    
+        
+    }
 }
