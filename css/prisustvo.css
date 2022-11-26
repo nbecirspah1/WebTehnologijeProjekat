@@ -85,7 +85,10 @@ td{
     border-left: 0;
 }
 
-#dugme1, #dugme2{
-    padding-left: 10%;
-    padding-right: 10%;
+#dugmeLijevo{
+    margin-left: 30%;
+}
+
+#dugmeDesno{
+    margin-left: 30%;
 }

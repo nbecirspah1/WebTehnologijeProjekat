@@ -1,12 +1,6 @@
 let TabelaPrisustvo = function(divRef, podaci){
 
-    divRef.innerHTML ="";
-    const att = document.createAttribute("class");
-    att.value="vertikalno";
-   let naslov = divRef.appendChild(document.createElement('h1'));
-   naslov.innerHTML = podaci.predmet;
-   let overflowDIV = divRef.appendChild(document.createElement('div'));
-   overflowDIV.setAttribute("id", "overflow");
+   
 
   /////////VALIDACIJA PODATAKA/////////
   if(podaci.brojPredavanjaSedmicno < 0 || podaci.brojVjezbiSedmicno < 0){//broj predavanja ili vjezbi < 0
@@ -48,7 +42,7 @@ let TabelaPrisustvo = function(divRef, podaci){
     }
   }
 
-   tekucaSedmica = 0;
+   let tekucaSedmica = 0;
   for(let i = 0; i< podaci.prisustva.length; i++){//Nalazimo tekucu sedmicu
      if(podaci.prisustva[i].sedmica > tekucaSedmica) 
        tekucaSedmica = podaci.prisustva[i].sedmica;
@@ -86,9 +80,16 @@ let TabelaPrisustvo = function(divRef, podaci){
     else if(broj == 14) return "XIV";
     else if(broj == 15) return "XV";
   }
-
   
   /////////PODACI SU UREDU, MOZEMO PRAVITI TABELU/////////
+  let nacrtajTabelu = function (tekucaSedmica) {
+    divRef.innerHTML ="";
+    const att = document.createAttribute("class");
+    att.value="vertikalno";
+   let naslov = divRef.appendChild(document.createElement('h1'));
+   naslov.innerHTML = podaci.predmet;
+   let overflowDIV = divRef.appendChild(document.createElement('div'));
+   overflowDIV.setAttribute("id", "overflow");
   let tabela = overflowDIV.appendChild(document.createElement('table'));
    let prviRed = tabela.appendChild(document.createElement('tr'));
    let kolonaIme = prviRed.appendChild(document.createElement('th'));
@@ -199,6 +200,8 @@ let TabelaPrisustvo = function(divRef, podaci){
       
     }
 
+
+
       /////////KREIRANJE BUTTON-A/////////
       let skripta = divRef.appendChild(document.createElement('script'));
       skripta.setAttribute("src", "https://kit.fontawesome.com/04a4ec8674.js");
@@ -206,26 +209,36 @@ let TabelaPrisustvo = function(divRef, podaci){
       let div1 = divRef.appendChild(document.createElement('div'));
       div1.setAttribute("id", "dugmici");
       let dugmeLijevo = div1.appendChild(document.createElement('button'));
+      dugmeLijevo.setAttribute("id", "dugmeLijevo");
       let strelicaLijevo = dugmeLijevo.appendChild(document.createElement('i'));
       strelicaLijevo.setAttribute("class", "fa-solid fa-arrow-left fa-2x");
-      //dugmeLijevo.onclick = new prethodnaSedmica();
       let dugmeDesno = div1.appendChild(document.createElement('button'));
+      dugmeDesno.setAttribute("id", "dugmeDesno");
       let strelicaDesno = dugmeDesno.appendChild(document.createElement('i'));
       strelicaDesno.setAttribute("class", "fa-solid fa-arrow-right fa-2x");
-      //dugmeDesno.onclick = new sljedecaSedmica();
+  }
 
+    new nacrtajTabelu(tekucaSedmica);
       let sljedecaSedmica = function () {
             if(tekucaSedmica!=15){
                 tekucaSedmica = tekucaSedmica + 1; 
             }
+
+    new nacrtajTabelu(tekucaSedmica);
+
     }
+
+ 
 
     let prethodnaSedmica = function () {
         if(tekucaSedmica != 1){
             tekucaSedmica = tekucaSedmica - 1; 
         }
-    }
+        new nacrtajTabelu(tekucaSedmica);
 
+    }
+    dugmeDesno.onclick =  sljedecaSedmica;
+    dugmeLijevo.onclick = prethodnaSedmica;
 
     return {
         sljedecaSedmica: sljedecaSedmica,
