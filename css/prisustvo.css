@@ -4,8 +4,15 @@ h1{
     text-align: center;
 }
 
+p{
+    font-size: 20pt;
+    font-weight: bold;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-div{
+#overflow{
     overflow-x: auto;
     display: flex;
 }
