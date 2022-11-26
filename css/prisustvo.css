@@ -25,7 +25,6 @@ td, th {
 table{
     border-collapse: collapse;
     margin-left: auto;
-    display: flex;
     margin-right: auto;
 }
 th{
