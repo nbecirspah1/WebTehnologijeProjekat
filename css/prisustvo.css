@@ -1,5 +1,5 @@
 h1{
-    font-size: 30pt;
+    font-size: 20pt;
     font-weight: bold;
     text-align: center;
 }
@@ -18,7 +18,7 @@ p{
 }
 
 h2, h3{
-    font-size: 20pt;
+    font-size: 15pt;
     text-align: center;
 
 }
@@ -32,7 +32,9 @@ td, th {
 table{
     border-collapse: collapse;
     margin-left: auto;
+    /*display: flex;*/
     margin-right: auto;
+   
 }
 th{
     height: 3%;
@@ -86,9 +88,19 @@ td{
 }
 
 #dugmeLijevo{
-    margin-left: 30%;
+    margin-left: 45%;
+    border-radius: 50%;
+    background-color:springgreen;
+    color:aliceblue;
+    border-color: aliceblue;
 }
 
 #dugmeDesno{
-    margin-left: 30%;
+    margin-left: 1%;
+    border-radius: 50%;
+    background-color:springgreen;
+    color:aliceblue;
+    border-color: aliceblue;
+
+
 }

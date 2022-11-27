@@ -1,7 +1,17 @@
 let TabelaPrisustvo = function(divRef, podaci){
 
-   
-
+   var dugmeDesno, dugmeLijevo, tabela;
+   var tekucaSedmica = 0;
+   var maxSedmica = 0;
+   divRef.innerHTML ="";
+   const att = document.createAttribute("class");
+   att.value="vertikalno";
+  let naslov = divRef.appendChild(document.createElement('h1'));
+  naslov.innerHTML = podaci.predmet;
+  divRef.appendChild(document.createElement('h2')).innerHTML = "BSc2";
+  divRef.appendChild(document.createElement('h3')).innerHTML = "Računarstvo i informatika";
+  let overflowDIV = divRef.appendChild(document.createElement('div'));
+  overflowDIV.setAttribute("id", "overflow");
   /////////VALIDACIJA PODATAKA/////////
   if(podaci.brojPredavanjaSedmicno < 0 || podaci.brojVjezbiSedmicno < 0){//broj predavanja ili vjezbi < 0
     let tekst =overflowDIV.appendChild(document.createElement('p')); 
@@ -42,23 +52,24 @@ let TabelaPrisustvo = function(divRef, podaci){
     }
   }
 
-   let tekucaSedmica = 0;
-   let maxSedmica = 0;
+
   for(let i = 0; i< podaci.prisustva.length; i++){//Nalazimo tekucu sedmicu
      if(podaci.prisustva[i].sedmica > tekucaSedmica) {
        tekucaSedmica = podaci.prisustva[i].sedmica;
        maxSedmica = podaci.prisustva[i].sedmica;
      }
   }
+  let pronadjenaPrvasedmica = false;
   for(j=1; j<=tekucaSedmica; j++){
    let pronadjenaItasedmica=false;
     for(let i =0; i<podaci.prisustva.length; i++){
       if(podaci.prisustva[i].sedmica == j){
+        pronadjenaPrvasedmica = true;
         pronadjenaItasedmica = true;
         break;
       }
     }
-    if(!pronadjenaItasedmica){
+    if(!pronadjenaItasedmica && pronadjenaPrvasedmica){
       let tekst =overflowDIV.appendChild(document.createElement('p')); 
       tekst.innerHTML ="Podaci o prisustvu nisu validni!"
       return 0;
@@ -83,8 +94,9 @@ let TabelaPrisustvo = function(divRef, podaci){
     else if(broj == 14) return "XIV";
     else if(broj == 15) return "XV";
   }
-  /////////FJE SLJEDECA SEDMICA I PRETHODNASEMICA/////////
-  let sljedecaSedmica = function () {
+ 
+ /////////FJE SLJEDECA SEDMICA I PRETHODNA SEDMICA/////////
+ let sljedecaSedmica = function () {
     if(tekucaSedmica < maxSedmica){
         tekucaSedmica = tekucaSedmica + 1; 
     }
@@ -103,17 +115,22 @@ new nacrtajTabelu(tekucaSedmica);
 
 }
 
+
   
   /////////PODACI SU UREDU, MOZEMO PRAVITI TABELU/////////
   let nacrtajTabelu = function (tekucaSedmica) {
-    divRef.innerHTML ="";
-    const att = document.createAttribute("class");
-    att.value="vertikalno";
-   let naslov = divRef.appendChild(document.createElement('h1'));
-   naslov.innerHTML = podaci.predmet;
-   let overflowDIV = divRef.appendChild(document.createElement('div'));
-   overflowDIV.setAttribute("id", "overflow");
-  let tabela = overflowDIV.appendChild(document.createElement('table'));
+  divRef.innerHTML = ""; 
+   const att = document.createAttribute("class");
+   att.value="vertikalno";
+  let naslov = divRef.appendChild(document.createElement('h1'));
+  naslov.innerHTML = podaci.predmet;
+  divRef.appendChild(document.createElement('h2')).innerHTML = "BSc2";
+  divRef.appendChild(document.createElement('h3')).innerHTML = "Računarstvo i informatika";
+  let overflowDIV = divRef.appendChild(document.createElement('div'));
+  overflowDIV.setAttribute("id", "overflow");
+  
+
+   tabela = overflowDIV.appendChild(document.createElement('table'));
    let prviRed = tabela.appendChild(document.createElement('tr'));
    let kolonaIme = prviRed.appendChild(document.createElement('th'));
    kolonaIme.innerHTML = "Ime i prezime";
@@ -128,11 +145,16 @@ new nacrtajTabelu(tekucaSedmica);
       kolonaBrojSedmice.colSpan = podaci.brojPredavanjaSedmicno + podaci.brojVjezbiSedmicno;
     }
    }
-
-   let zadnjaKolona = prviRed.appendChild(document.createElement('th'));
-   zadnjaKolona.colSpan = 15 - maxSedmica + 1;
-   zadnjaKolona.innerHTML = toRimskiBrojevi(maxSedmica+1) + "-" + toRimskiBrojevi(15);
- 
+   if(maxSedmica!=15){
+    let zadnjaKolona = prviRed.appendChild(document.createElement('th'));
+    zadnjaKolona.colSpan = 15 - maxSedmica + 1;
+    if(maxSedmica!=14){
+    zadnjaKolona.innerHTML = toRimskiBrojevi(maxSedmica+1) + "-" + toRimskiBrojevi(15);
+   }
+   else{
+    zadnjaKolona.innerHTML =toRimskiBrojevi(15);
+   }
+   }
     for(let i = 0; i < podaci.studenti.length; i++){//Ovom for petljom prolazimo kroz sve studente i
                                                     //upisujemo njihova imena i indekse
         let red = tabela.appendChild(document.createElement('tr'));
@@ -152,8 +174,10 @@ new nacrtajTabelu(tekucaSedmica);
             if(podaci.studenti[i].index == podaci.prisustva[j].index && podaci.prisustva[j].sedmica == sedmica){
              let kolona = red.appendChild(document.createElement('td'));
              kolona.rowSpan = "2";
-              kolona.innerHTML = ((podaci.prisustva[j].predavanja + podaci.prisustva[j].vjezbe)/
-              (podaci.brojPredavanjaSedmicno +  podaci.brojVjezbiSedmicno))*100 + '%';
+             if(podaci.prisustva[j].predavanja != null && podaci.prisustva[j].vjezbe != null){
+                kolona.innerHTML = (((podaci.prisustva[j].predavanja + podaci.prisustva[j].vjezbe)/
+                (podaci.brojPredavanjaSedmicno +  podaci.brojVjezbiSedmicno))*100).toFixed(0) + '%';
+            }
               sedmica = sedmica + 1;
               j=-1;
           }
@@ -176,7 +200,7 @@ new nacrtajTabelu(tekucaSedmica);
               if( k <= podaci.prisustva[j].predavanja){
                 kol1.setAttribute("class", "zelena");
               }
-              else{
+              else if(podaci.prisustva[j].predavanja != null){
                 kol1.setAttribute("class", "crvena");
               }
             }
@@ -188,7 +212,7 @@ new nacrtajTabelu(tekucaSedmica);
               if( k <= podaci.prisustva[j].vjezbe){
                 kol1.setAttribute("class", "zelena");
               }
-              else{
+              else if(podaci.prisustva[j].vjezbe != null){
                 kol1.setAttribute("class", "crvena");
               }
             
@@ -235,16 +259,16 @@ new nacrtajTabelu(tekucaSedmica);
       skripta.setAttribute("crossorigin", "anonymous");
       let div1 = divRef.appendChild(document.createElement('div'));
       div1.setAttribute("id", "dugmici");
-      let dugmeLijevo = div1.appendChild(document.createElement('button'));
+       dugmeLijevo = div1.appendChild(document.createElement('button'));
       dugmeLijevo.setAttribute("id", "dugmeLijevo");
       let strelicaLijevo = dugmeLijevo.appendChild(document.createElement('i'));
-      strelicaLijevo.setAttribute("class", "fa-solid fa-arrow-left fa-2x");
-      let dugmeDesno = div1.appendChild(document.createElement('button'));
+      strelicaLijevo.setAttribute("class", "fa-solid fa-arrow-left fa-3x");
+       dugmeDesno = div1.appendChild(document.createElement('button'));
       dugmeDesno.setAttribute("id", "dugmeDesno");
       let strelicaDesno = dugmeDesno.appendChild(document.createElement('i'));
-      strelicaDesno.setAttribute("class", "fa-solid fa-arrow-right fa-2x");
-      dugmeDesno.onclick =  sljedecaSedmica;
-      dugmeLijevo.onclick =  prethodnaSedmica;
+      strelicaDesno.setAttribute("class", "fa-solid fa-arrow-right fa-3x");
+      dugmeDesno.onclick = sljedecaSedmica;
+      dugmeLijevo.onclick = prethodnaSedmica;
   } 
 
 
