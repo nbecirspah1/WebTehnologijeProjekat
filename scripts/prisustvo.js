@@ -20,13 +20,13 @@ new TabelaPrisustvo(document.getElementById("tabela"), {
 			{
 			"sedmica": 3,
 			"predavanja": 2,
-			"vjezbe": 0,
+			"vjezbe": 1,
 			"index": 12346
 		},
 			{
 			"sedmica": 2,
 			"predavanja": 2,
-			"vjezbe": 0,
+			"vjezbe": 1,
 			"index": 12346
 		},
 		{
@@ -38,7 +38,7 @@ new TabelaPrisustvo(document.getElementById("tabela"), {
 		{
 			"sedmica": 1,
 			"predavanja": 2,
-			"vjezbe": 0,
+			"vjezbe": 1,
 			"index": 12345
 		}
 		,{
@@ -50,20 +50,20 @@ new TabelaPrisustvo(document.getElementById("tabela"), {
 		{
 			"sedmica": 3,
 			"predavanja": 2,
-			"vjezbe": 0,
+			"vjezbe": 1,
 			"index": 12345
 		},
         {
 			"sedmica": 4,
 			"predavanja": 2,
-			"vjezbe": 0,
+			"vjezbe": 1,
 			"index": 12346
 		},
         
 		{
 			"sedmica": 4,
 			"predavanja": 2,
-			"vjezbe": 0,
+			"vjezbe": 1,
 			"index": 12345
 		}
 	],

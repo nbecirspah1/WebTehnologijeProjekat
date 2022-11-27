@@ -43,9 +43,12 @@ let TabelaPrisustvo = function(divRef, podaci){
   }
 
    let tekucaSedmica = 0;
+   let maxSedmica = 0;
   for(let i = 0; i< podaci.prisustva.length; i++){//Nalazimo tekucu sedmicu
-     if(podaci.prisustva[i].sedmica > tekucaSedmica) 
+     if(podaci.prisustva[i].sedmica > tekucaSedmica) {
        tekucaSedmica = podaci.prisustva[i].sedmica;
+       maxSedmica = podaci.prisustva[i].sedmica;
+     }
   }
   for(j=1; j<=tekucaSedmica; j++){
    let pronadjenaItasedmica=false;
@@ -80,6 +83,26 @@ let TabelaPrisustvo = function(divRef, podaci){
     else if(broj == 14) return "XIV";
     else if(broj == 15) return "XV";
   }
+  /////////FJE SLJEDECA SEDMICA I PRETHODNASEMICA/////////
+  let sljedecaSedmica = function () {
+    if(tekucaSedmica < maxSedmica){
+        tekucaSedmica = tekucaSedmica + 1; 
+    }
+
+new nacrtajTabelu(tekucaSedmica);
+
+}
+
+
+
+let prethodnaSedmica = function () {
+if(tekucaSedmica != 1){
+    tekucaSedmica = tekucaSedmica - 1; 
+}
+new nacrtajTabelu(tekucaSedmica);
+
+}
+
   
   /////////PODACI SU UREDU, MOZEMO PRAVITI TABELU/////////
   let nacrtajTabelu = function (tekucaSedmica) {
@@ -98,7 +121,7 @@ let TabelaPrisustvo = function(divRef, podaci){
    kolonaIndeks.innerHTML = "Index";
 
 
-   for(let i =1; i<=tekucaSedmica; i++){
+   for(let i =1; i<=maxSedmica; i++){
     let kolonaBrojSedmice = prviRed.appendChild(document.createElement('th'));
     kolonaBrojSedmice.innerHTML = toRimskiBrojevi(i);
     if(i == tekucaSedmica){
@@ -107,8 +130,8 @@ let TabelaPrisustvo = function(divRef, podaci){
    }
 
    let zadnjaKolona = prviRed.appendChild(document.createElement('th'));
-   zadnjaKolona.colSpan = 15 - tekucaSedmica + 1;
-   zadnjaKolona.innerHTML = toRimskiBrojevi(tekucaSedmica+1) + "-" + toRimskiBrojevi(15);
+   zadnjaKolona.colSpan = 15 - maxSedmica + 1;
+   zadnjaKolona.innerHTML = toRimskiBrojevi(maxSedmica+1) + "-" + toRimskiBrojevi(15);
  
     for(let i = 0; i < podaci.studenti.length; i++){//Ovom for petljom prolazimo kroz sve studente i
                                                     //upisujemo njihova imena i indekse
@@ -125,7 +148,7 @@ let TabelaPrisustvo = function(divRef, podaci){
         let sedmica = 1;
         for(let j = 0; j < podaci.prisustva.length; j++){//Prolazimo kroz prisustva i za tekuceg studenta sa
                                                        //odredjenim brojem indeksa upisujemo prisustvo
-          if(sedmica != tekucaSedmica){  
+          if(sedmica != tekucaSedmica && sedmica<=maxSedmica){  
             if(podaci.studenti[i].index == podaci.prisustva[j].index && podaci.prisustva[j].sedmica == sedmica){
              let kolona = red.appendChild(document.createElement('td'));
              kolona.rowSpan = "2";
@@ -142,8 +165,8 @@ let TabelaPrisustvo = function(divRef, podaci){
           }
           
         }
-        else{
-          if(podaci.studenti[i].index == podaci.prisustva[j].index && podaci.prisustva[j].sedmica == sedmica){
+        else if(sedmica==tekucaSedmica){
+          if(podaci.studenti[i].index == podaci.prisustva[j].index && podaci.prisustva[j].sedmica == tekucaSedmica){
             praznaCelija=false;
             for(let k = 1; k <= podaci.brojPredavanjaSedmicno; k++){
               let kol = red.appendChild(document.createElement('td'));
@@ -170,7 +193,8 @@ let TabelaPrisustvo = function(divRef, podaci){
               }
             
            }
-           
+           sedmica = sedmica + 1;
+           j=-1;
             }
             else if(j == podaci.prisustva.length -1 && praznaCelija==true){
               for(let k = 1; k <= podaci.brojPredavanjaSedmicno; k++){
@@ -186,10 +210,13 @@ let TabelaPrisustvo = function(divRef, podaci){
                 let kol1 = red1.appendChild(document.createElement('td'));
               
              }
+             sedmica = sedmica + 1;
+             j=-1;
             }
+            
         }
       }
-      for(let i = tekucaSedmica +1; i<=15; i++){
+      for(let i = maxSedmica +1; i<=15; i++){
         let kol = red.appendChild(document.createElement('td'));
         kol.setAttribute("class", "prazna");
         kol.rowSpan = 2;
@@ -216,29 +243,15 @@ let TabelaPrisustvo = function(divRef, podaci){
       dugmeDesno.setAttribute("id", "dugmeDesno");
       let strelicaDesno = dugmeDesno.appendChild(document.createElement('i'));
       strelicaDesno.setAttribute("class", "fa-solid fa-arrow-right fa-2x");
-  }
+      dugmeDesno.onclick =  sljedecaSedmica;
+      dugmeLijevo.onclick =  prethodnaSedmica;
+  } 
 
-    new nacrtajTabelu(tekucaSedmica);
-      let sljedecaSedmica = function () {
-            if(tekucaSedmica!=15){
-                tekucaSedmica = tekucaSedmica + 1; 
-            }
 
-    new nacrtajTabelu(tekucaSedmica);
+    
+     
+  new nacrtajTabelu(tekucaSedmica);
 
-    }
-
- 
-
-    let prethodnaSedmica = function () {
-        if(tekucaSedmica != 1){
-            tekucaSedmica = tekucaSedmica - 1; 
-        }
-        new nacrtajTabelu(tekucaSedmica);
-
-    }
-    dugmeDesno.onclick =  sljedecaSedmica;
-    dugmeLijevo.onclick = prethodnaSedmica;
 
     return {
         sljedecaSedmica: sljedecaSedmica,
