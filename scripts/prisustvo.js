@@ -10,6 +10,10 @@ new TabelaPrisustvo(document.getElementById("tabela"), {
     {
     "ime": "Neko Nekić",
     "index": 12347
+    },
+    {
+    "ime": "Nejla Becirspahic",
+    "index": 18835
     }
 ],
 "prisustva": [{
@@ -20,6 +24,12 @@ new TabelaPrisustvo(document.getElementById("tabela"), {
     },
     {
         "sedmica": 1,
+        "predavanja": 1,
+        "vjezbe": 2,
+        "index": 18835
+    },
+    {
+        "sedmica": 1,
         "predavanja": 2,
         "vjezbe": 2,
         "index": 12346
@@ -82,59 +92,6 @@ new TabelaPrisustvo(document.getElementById("tabela"), {
         "sedmica": 4,
         "predavanja": 2,
         "vjezbe": 2,
-        "index": 12347
-    },
-    {
-        "sedmica": 5,
-        "predavanja": 2,
-        "vjezbe": 2,
-        "index": 12345
-    },
-    {
-        "sedmica": 5,
-        "predavanja": 2,
-        "vjezbe": 0,
-        "index": 12346
-    },
-    {
-        "sedmica": 5,
-        "predavanja": 2,
-        "vjezbe": 2,
-        "index": 12347
-    },
-    {
-        "sedmica": 6,
-        "predavanja": 2,
-        "vjezbe": 2,
-        "index": 12345
-    },
-    {
-        "sedmica": 6,
-        "predavanja": 1,
-        "vjezbe": 1,
-        "index": 12346
-    },
-    {
-        "sedmica": 6,
-        "predavanja": 2,
-        "vjezbe": 2,
-        "index": 12347
-    },
-    {
-        "sedmica": 7,
-        "predavanja": 2,
-        "vjezbe": 2,
-        "index": 12345
-    },
-    {
-        "sedmica": 7,
-        "predavanja": 2,
-        "vjezbe": 0,
-        "index": 12346
-    },
-    {
-        "sedmica": 7,
-        "predavanja": 0,
         "index": 12347
     }
 ],
