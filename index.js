@@ -41,13 +41,11 @@ app.post('/prijava.html', (req, res) => {
         const users = JSON.parse(data);
         const user = users.find(u => u.nastavnik.username === username && u.nastavnik.password_hash === password);
         if (user) {
-            // If a user is found, send a JSON response with a success message
             req.session.username = username;
             req.session.predmeti = user.predmeti;
             res.json({ success: true, message: 'Uspješna prijava' });
             
           } else {
-            // If no user is found, send a JSON response with an error message
             res.json({ success: false, message: 'Neuspješna prijava' });
           }
     });
