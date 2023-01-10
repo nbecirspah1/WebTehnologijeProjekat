@@ -9,12 +9,13 @@ const bodyParser = require('body-parser');
 app.use(express.static("public"));
 app.use(express.static("html"));
 app.use(bodyParser.json());
+
 app.use(session({
     secret: 'neka tajna sifra',
     resave: true,
     saveUninitialized: true
  })); 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.get('/predmet.html', (req,res) => {
@@ -29,27 +30,38 @@ app.get('/prijava.html', (req,res) => {
     res.sendFile(path.join(__dirname, 'public/html/prijava.html'));
 })
 
-app.post('/prijava.html', (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
+app.post('/login', (req, res) => {
     fs.readFile('data/nastavnici.json', 'utf-8', (err, data) =>{
         if(err){
             console.error(err);
             res.json({ success: false, message: 'An error occurred' });
+            
             return;
         }
-        const users = JSON.parse(data);
-        const user = users.find(u => u.nastavnik.username === username && u.nastavnik.password_hash === password);
-        if (user) {
-            req.session.username = username;
-            req.session.predmeti = user.predmeti;
+
+        //const {username, password} = req.body.data;
+        const username = req.body.data.username;
+        const password = req.body.data.password;
+        const nastavnici = JSON.parse(data);
+       var nastavnik = null;
+        // nastavnik=nastavnici.find(u => u.nastavnik.username === username 
+        //      && u.nastavnik.password_hash === password);
+        
+        for(const nastavnik of nastavnici){
+           // console.log(nastavnik);
+            console.log("Ispisi usn", username);
+            if(nastavnik.nastavnik.username === username &&
+                nastavnik.nastavnik.password_hash === password){
             res.json({ success: true, message: 'Uspješna prijava' });
-            
-          } else {
-            res.json({ success: false, message: 'Neuspješna prijava' });
-          }
-    });
+                    return;
+                }
+        }
+            res.json({ success: false, message: 'Neuspješna prijava'  });
+          
+  
 });
+});
+
 app.all('*', (req,res) => {
     res.status(404).send('<h1>Resource not found</h1>');
 })
