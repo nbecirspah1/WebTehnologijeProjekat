@@ -7,9 +7,17 @@ const PoziviAjax = (()=>{
 
     // }
     // vraća listu predmeta za loginovanog nastavnika ili grešku da nastavnik nije loginovan
-    // function impl_getPredmeti(fnCallback){
-
-    // }
+     function impl_getPredmeti(fnCallback){
+      const xhr = new XMLHttpRequest();
+      console.log("Usao u ajax get Predmeti");
+      xhr.open('GET', 'http://localhost:3000/predmeti', true);
+      xhr.responseType = 'json';
+      xhr.onreadystatechange = function(){fnCallback(xhr);}
+      //xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send();
+      // xhr.send(JSON.stringify({data: {username, password}}));
+    
+     }
     function impl_postLogin(username,password,fnCallback){
   
 
@@ -25,9 +33,12 @@ const PoziviAjax = (()=>{
     xhr.send(JSON.stringify({data: {username, password}}));
   
       }
-    // function impl_postLogout(fnCallback){
-
-    // }
+    function impl_postLogout(fnCallback){
+      const xhr = new XMLHttpRequest();
+      console.log("Usao u impl_postLogout");
+      xhr.onreadystatechange = function(){fnCallback(xhr);}
+      xhr.open('POST', 'http://localhost:3000/logout', true);   
+    }
     // //prisustvo ima oblik {sedmica:N,predavanja:P,vjezbe:V}
     // function impl_postPrisustvo(naziv,index,prisustvo,fnCallback){
 
@@ -35,9 +46,9 @@ const PoziviAjax = (()=>{
 
     return{
         postLogin: impl_postLogin,
-        // postLogout: impl_postLogout,
-        // getPredmet: impl_getPredmet,
-        // getPredmeti: impl_getPredmeti,
+        postLogout: impl_postLogout,
+        //getPredmet: impl_getPredmet,
+         getPredmeti: impl_getPredmeti
         // postPrisustvo: impl_postPrisustvo
     };
 })();
