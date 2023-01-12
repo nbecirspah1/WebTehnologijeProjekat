@@ -26,7 +26,7 @@ app.get('/predmeti', (req, res) => {
         res.json({ success: false, greska: 'Nastavnik nije loginovan' });
         return;
     }
-    res.json({predmeti: req.session.predmeti})
+    res.json({success: true, predmeti: req.session.predmeti})
    // res.sendFile(path.join(__dirname, 'public/html/predmeti'));
 
 })
@@ -73,10 +73,31 @@ app.post('/logout', (req, res) => {
             res.json({success: false, message: 'Neuspješna odjava'});
             return;   
         }
-        res.json({success: false, message: 'Uspješna odjava'});
+        res.json({success: true, message: 'Uspješna odjava'});
 
     })
 })
+
+app.get('/predmet/:naziv', (req, res) => {
+    const nazivPredmeta = req.params.naziv;
+    fs.readFile('data/prisustva.json', 'utf-8', (err, data) => {
+        if (err) {
+            console.error(err);
+            res.json({ success: false, poruka: 'Predmet se ne moze ucitati' });
+
+            return;
+        }
+        const prisustva = JSON.parse(data);
+        for(const prisustvo of prisustva){
+            if(prisustvo.predmet === nazivPredmeta){
+            res.json({ success: true, prisustvo: prisustvo  });  
+            return;
+            }
+        }
+        res.json({ success: false, poruka: 'Ovaj predmet ne postoji' });
+
+    });
+});
 
 
 app.all('*', (req, res) => {

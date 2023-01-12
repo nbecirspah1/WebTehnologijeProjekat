@@ -74,15 +74,15 @@ td{
 }
 
 .prazna{
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid darkslategrey;
     border-right: 0;
     border-top: 0;
     border-left: 0;
 }
 
 .zadnja{
-    border-bottom: 2px solid black;
-    border-right: 2px solid black;
+    border-bottom: 2px solid darkslategrey;
+    border-right: 2px solid darkslategrey;
     border-top: 0;
     border-left: 0;
 }
@@ -90,17 +90,24 @@ td{
 #dugmeLijevo{
     margin-left: 45%;
     border-radius: 50%;
-    background-color:springgreen;
-    color:aliceblue;
-    border-color: aliceblue;
+    background-color:darkslategrey;
+    color:white;
+    border: none;
+    cursor: pointer;
 }
 
 #dugmeDesno{
     margin-left: 1%;
     border-radius: 50%;
-    background-color:springgreen;
-    color:aliceblue;
-    border-color: aliceblue;
+    background-color:darkslategrey;
+    color:white;
+    border: none;
+    cursor: pointer;
 
+}
+
+#dugmeDesno:hover, #dugmeLijevo:hover{
+    filter: brightness(200%); 
+    /* color: rgb(52, 172, 172); */
 
 }
