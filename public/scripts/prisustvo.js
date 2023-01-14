@@ -1,3 +1,4 @@
+
 new TabelaPrisustvo(document.getElementById("tabela"), {
     "studenti": [{
         "ime": "Neko Nekić",
@@ -102,5 +103,5 @@ new TabelaPrisustvo(document.getElementById("tabela"), {
 }
 );
 
-window.sljedecaSedmica = prisustvo.sljedecaSedmica;
-window.prethodnaSedmica = prisustvo.prethodnaSedmica;
+// window.sljedecaSedmica = prisustvo.sljedecaSedmica;
+// window.prethodnaSedmica = prisustvo.prethodnaSedmica;

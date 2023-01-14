@@ -1,12 +1,16 @@
+
 let TabelaPrisustvo = function(divRef, podaci){
+  //let predavanja=0, vjezbe=0;
+  var tekucaSedmica = 0;
 
    var dugmeDesno, dugmeLijevo, tabela;
-   var tekucaSedmica = 0;
    var maxSedmica = 0;
    divRef.innerHTML ="";
    const att = document.createAttribute("class");
    att.value="vertikalno";
-  let naslov = divRef.appendChild(document.createElement('h1'));
+   let naslovEl = document.createElement('h1');
+  let naslov = divRef.appendChild(naslovEl);
+  naslov.setAttribute("id", "nazivPredmeta");
   naslov.innerHTML = podaci.predmet;
   divRef.appendChild(document.createElement('h2')).innerHTML = "BSc2";
   divRef.appendChild(document.createElement('h3')).innerHTML = "Računarstvo i informatika";
@@ -123,6 +127,7 @@ new nacrtajTabelu(tekucaSedmica);
    const att = document.createAttribute("class");
    att.value="vertikalno";
   let naslov = divRef.appendChild(document.createElement('h1'));
+  naslov.setAttribute("id", "nazivPredmeta");
   naslov.innerHTML = podaci.predmet;
   divRef.appendChild(document.createElement('h2')).innerHTML = "BSc2";
   divRef.appendChild(document.createElement('h3')).innerHTML = "Računarstvo i informatika";
@@ -198,11 +203,17 @@ new nacrtajTabelu(tekucaSedmica);
               kol.innerHTML = "P" + k;
               let kol1 = red1.appendChild(document.createElement('td'));
               if( k <= podaci.prisustva[j].predavanja){
-                kol1.setAttribute("class", "zelena");
+            //    kol1.setAttribute("class", "zelena");
+                  kol1.classList.add("zelena", "predavanja");
+
               }
               else if(podaci.prisustva[j].predavanja != null){
-                kol1.setAttribute("class", "crvena");
+           //     kol1.setAttribute("class", "crvena");
+                  kol1.classList.add("crvena", "predavanja");
+
               }
+           //   kol1.setAttribute("class", "predavanja");
+
             }
             for(let k = 1; k <= podaci.brojVjezbiSedmicno; k++){
               let kol = red.appendChild(document.createElement('td'));
@@ -210,12 +221,16 @@ new nacrtajTabelu(tekucaSedmica);
               kol.innerHTML = "V" + k;
               let kol1 = red1.appendChild(document.createElement('td'));
               if( k <= podaci.prisustva[j].vjezbe){
-                kol1.setAttribute("class", "zelena");
+               // kol1.setAttribute("class", "zelena");
+                kol1.classList.add("zelena", "vjezbe");
               }
               else if(podaci.prisustva[j].vjezbe != null){
-                kol1.setAttribute("class", "crvena");
+              //  kol1.setAttribute("class", "crvena");
+                kol1.classList.add("crvena", "vjezbe");
+
               }
-            
+           //   kol1.setAttribute("class", "vjezbe");
+              
            }
            sedmica = sedmica + 1;
            j=-1;
@@ -269,10 +284,81 @@ new nacrtajTabelu(tekucaSedmica);
       strelicaDesno.setAttribute("class", "fa-solid fa-arrow-right fa-3x");
       dugmeDesno.onclick = sljedecaSedmica;
       dugmeLijevo.onclick = prethodnaSedmica;
+
+      let crveneCelije = document.getElementsByClassName("crvena");
+
+      for (let i = 0; i < crveneCelije.length; i++) {
+        crveneCelije[i].addEventListener("click", function() {
+            console.log("USao u listenr od crv cel")
+            let nazivPredmeta = document.getElementById("nazivPredmeta");
+            let red = crveneCelije[i].closest('tr');
+            let redChildren = red.children;
+            let red1 = red.previousElementSibling;
+            let index = red1.children[1];
+            let j = 0;
+            tdElements = red1.children;
+            
+            for(j = 2; j<tdElements.length; j++){
+                const td = tdElements[j];
+                if(tdElements[j].innerHTML.startsWith("P")) {
+                  break;
+                }
+            }
+            let brojPredavanja = 0;
+            let brojVjezbi = 0;
+            let ind = 0;
+           
+            for(let k=j; k<tdElements.length; k++){
+              if(tdElements[k].innerHTML.startsWith("V") && redChildren[ind].classList.contains("zelena")){
+                brojVjezbi++;
+                
+
+              }
+              else if(tdElements[k].innerHTML.startsWith("P") && redChildren[ind].classList.contains("zelena")){
+                brojPredavanja++;
+                
+
+              }
+              ind++;
+            }
+            console.log("Broj pred", brojPredavanja);
+            console.log("Broj vj", brojVjezbi);
+
+            if(crveneCelije[i].classList.contains("predavanja")){
+                brojPredavanja++;
+            }
+            else{
+              brojVjezbi++;
+            }
+            console.log("Broj pred poslije", brojPredavanja);
+            console.log("Broj vj poslije", brojVjezbi);
+
+            PoziviAjax.postPrisustvo(nazivPredmeta.innerHTML, index.innerHTML, {sedmica: j-1, predavanja: brojPredavanja, vjezbe: brojVjezbi }, postPrisustvo1)
+
+            //crveneCelije[i].className = "zelena";
+        });
+    }
+
   } 
 
 
-    
+  function postPrisustvo1(xhr) {
+    if (xhr.readyState == 4 && xhr.status === 200) {
+        const response = JSON.parse(xhr.response);
+        console.log("Evo me u postPrisustvo1", response.success);
+        console.log("Proslijedjeni podaci", response.prisustvo);
+        if (response.success) {
+            new TabelaPrisustvo(document.getElementById("tabela"), response.prisustvo);
+         //   window.sljedecaSedmica = TabelaPrisustvo.sljedecaSedmica;
+           // window.prethodnaSedmica = TabelaPrisustvo.prethodnaSedmica;
+         
+        } else {
+            alert(response.poruka);
+        }
+    }
+
+}
+
      
   new nacrtajTabelu(tekucaSedmica);
 

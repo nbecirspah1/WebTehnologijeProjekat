@@ -87,6 +87,12 @@ td{
     border-left: 0;
 }
 
+.crvena:hover, .zelena:hover, .bijela:hover{
+    filter: brightness(75%); 
+    /* color: rgb(52, 172, 172); */
+
+}
+
 #dugmeLijevo{
     margin-left: 45%;
     border-radius: 50%;

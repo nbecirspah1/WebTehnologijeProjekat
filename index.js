@@ -99,6 +99,61 @@ app.get('/predmet/:naziv', (req, res) => {
     });
 });
 
+app.post('/prisustvo/predmet/:naziv/student/:index', (req, res) => {
+    const nazivPredmeta = req.params.naziv;
+    const index = req.params.index;
+    const reqPrisustvo = req.body;
+  //  console.log("Sedmica koja se salje u req.body", req.body.sedmica);
+    //console.log("Vjezbe u req", req.body.predavanja);
+    //console.log("Predavanja u req", req.body.vjezbe);
+    fs.readFile('data/prisustva.json', 'utf-8', (err, data) => {
+        if (err) {
+            console.error(err);
+            res.json({ success: false, poruka: 'Prisustvo se ne moze azurirati' });
+
+            return;
+        }
+        var prisustva = JSON.parse(data);
+        for(let podaci of prisustva){
+          //  console.log("Usao u for petlju");
+            if(podaci.predmet === nazivPredmeta){
+            //    console.log("uSAO U IF");
+           //console.log(nazivPredmeta);
+           // console.log(podaci.predmet);
+                for(let prisustvo of podaci.prisustva){
+                    //{sedmica:N,predavanja:P,vjezbe:V}
+                    if(reqPrisustvo.sedmica == prisustvo.sedmica && index == prisustvo.index){
+                    //console.log(prisustvo)
+
+                        console.log("Prisustvo na pred prije azuriranja: ",prisustvo.predavanja);
+                        prisustvo.predavanja = reqPrisustvo.predavanja;
+                        console.log("Prisustvo na pred poslije azuriranja: ",prisustvo.predavanja);
+                        prisustvo.vjezbe = reqPrisustvo.vjezbe;
+                        //console.log("Vjezbe: ", prisustvo.vjezbe);
+                    }
+                }
+            }
+        }
+        fs.writeFile('data/prisustva.json', JSON.stringify(prisustva), (err) => {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("Upisani podaci");
+                for(prisustvoPredmeta of prisustva){
+                    if(prisustvoPredmeta.predmet === nazivPredmeta){
+                        res.json({ success: true, prisustvo: prisustvoPredmeta });
+                        console.log(prisustvoPredmeta);
+                    }
+                }
+            }
+        });
+
+    });
+
+    
+
+});
+
 
 app.all('*', (req, res) => {
     res.status(404).send('<h1>Resource not found</h1>');
