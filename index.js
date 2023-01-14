@@ -23,10 +23,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/predmeti', (req, res) => {
     if (req.session.username == null || req.session.predmeti == null) {
-        res.json({ success: false, greska: 'Nastavnik nije loginovan' });
+        res.json({ greska: 'Nastavnik nije loginovan' });
         return;
     }
-    res.json({ success: true, predmeti: req.session.predmeti })
+    res.json({ predmeti: req.session.predmeti })
     // res.sendFile(path.join(__dirname, 'public/html/predmeti'));
 
 })
@@ -36,7 +36,7 @@ app.post('/login', (req, res) => {
     fs.readFile('data/nastavnici.json', 'utf-8', (err, data) => {
         if (err) {
             console.error(err);
-            res.json({ success: false, poruka: 'An error occurred' });
+            res.json({ poruka: 'An error occurred' });
 
             return;
         }
@@ -48,21 +48,21 @@ app.post('/login', (req, res) => {
         var nastavnik = null;
         // nastavnik=nastavnici.find(u => u.nastavnik.username === username 
         //      && u.nastavnik.password_hash === password);
-
         for (const nastavnik of nastavnici) {
             // console.log(nastavnik);
             //  console.log("Ispisi usn", username);
-            if (nastavnik.nastavnik.username === username &&
-                nastavnik.nastavnik.password_hash === password) {
+            if (nastavnik.nastavnik.username === username && nastavnik.nastavnik.password_hash === password) {
                 req.session.username = username;
                 req.session.predmeti = nastavnik.predmeti;
-                res.json({ success: true, poruka: 'Uspješna prijava' });
+                res.json({ poruka: 'Uspješna prijava' });
                 return;
             }
+           
+          
         }
-        res.json({ success: false, poruka: 'Neuspješna prijava' });
-
-
+   
+            res.json({ poruka: 'Neuspješna prijava' });
+         
     });
 });
 
@@ -70,10 +70,10 @@ app.post('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             console.error(err);
-            res.json({ success: false, message: 'Neuspješna odjava' });
+            res.json({ poruka: 'Neuspješna odjava' });
             return;
         }
-        res.json({ success: true, message: 'Uspješna odjava' });
+        res.json({poruka: 'Uspješna odjava' });
 
     })
 })
@@ -83,18 +83,18 @@ app.get('/predmet/:naziv', (req, res) => {
     fs.readFile('data/prisustva.json', 'utf-8', (err, data) => {
         if (err) {
             console.error(err);
-            res.json({ success: false, poruka: 'Predmet se ne moze ucitati' });
+            res.json({ poruka: 'Predmet se ne moze ucitati' });
 
             return;
         }
         const prisustva = JSON.parse(data);
         for (const prisustvo of prisustva) {
             if (prisustvo.predmet === nazivPredmeta) {
-                res.json({ success: true, prisustvo: prisustvo });
+                res.json({ prisustvo: prisustvo });
                 return;
             }
         }
-        res.json({ success: false, poruka: 'Ovaj predmet ne postoji' });
+        res.json({  poruka: 'Ovaj predmet ne postoji' });
 
     });
 });

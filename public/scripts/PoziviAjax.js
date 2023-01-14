@@ -8,7 +8,16 @@ const PoziviAjax = (()=>{
       const xhr = new XMLHttpRequest();
       xhr.open('GET',  `http://localhost:3000/predmet/${naziv}`, true);
       xhr.responseType = 'json';
-      xhr.onreadystatechange = function(){fnCallback(xhr);}
+      xhr.onreadystatechange = function(){
+        if (xhr.readyState == 4 && xhr.status === 200) {
+          fnCallback(null, xhr.response);
+        }
+        else if (xhr.readyState == 4 && xhr.status === 404) {
+          fnCallback(xhr.response, null);
+        }
+      }
+     
+      
       xhr.send();
     }
     // vraća listu predmeta za loginovanog nastavnika ili grešku da nastavnik nije loginovan
@@ -19,7 +28,14 @@ const PoziviAjax = (()=>{
 
       xhr.open('GET', 'http://localhost:3000/predmeti', true);
       xhr.responseType = 'json';
-      xhr.onreadystatechange = function(){fnCallback(xhr);}
+      xhr.onreadystatechange = function(){
+        if (xhr.readyState == 4 && xhr.status === 200) {
+          fnCallback(null, xhr.response);
+        }
+        else if (xhr.readyState == 4 && xhr.status === 404) {
+          fnCallback(xhr.response, null);
+        }
+      }
       xhr.send();
     
      }
@@ -27,12 +43,26 @@ const PoziviAjax = (()=>{
   
 
   
-    const data = { username, password };
+    //const data = { username, password };
   
     const xhr = new XMLHttpRequest();
     console.log("Usao u ajax");
    
-    xhr.onreadystatechange = function(){fnCallback(xhr);}
+    //xhr.onreadystatechange = function(){fnCallback(xhr);}
+    xhr.onreadystatechange = function(){
+    if (xhr.readyState == 4 && xhr.status === 200) {
+      console.log("Usao u status 200")
+      por = JSON.parse(xhr.response)
+      console.log(por.poruka)
+    
+      fnCallback(null, xhr.response);
+    }
+    else if (xhr.readyState == 4 && xhr.status === 404) {
+      console.log("Usao u status 404")
+
+      fnCallback(xhr.response, null);
+    }
+    }
     xhr.open('POST', 'http://localhost:3000/login', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({data: {username, password}}));
@@ -41,7 +71,14 @@ const PoziviAjax = (()=>{
     function impl_postLogout(fnCallback){
       const xhr = new XMLHttpRequest();
       console.log("Usao u impl_postLogout");
-      xhr.onreadystatechange = function(){fnCallback(xhr);}
+      xhr.onreadystatechange = function(){
+        if (xhr.readyState == 4 && xhr.status === 200) {
+          fnCallback(null, xhr.response);
+        }
+        else if (xhr.readyState == 4 && xhr.status === 404) {
+          fnCallback(xhr.response, null);
+        }
+      }
       xhr.open('POST', 'http://localhost:3000/logout', true);   
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send();

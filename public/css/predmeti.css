@@ -40,6 +40,8 @@ body {
       list-style-type: none;
       float: left;
       padding: 20px;
+      cursor: pointer;
+
     }
   
     [id] {

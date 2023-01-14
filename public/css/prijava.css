@@ -37,3 +37,10 @@ form {
     background-color: lightsteelblue;
   }
   
+  #alertPoruka{
+    background-color: rgb(225, 98, 98, 0.5);
+    color:rgb(212, 40, 40);
+    border: rgb(212, 40, 40);
+    font-size: 1.5em;
+
+  }

@@ -6,28 +6,36 @@ window.onload = function () {
 
 
 }
-function odjava(xhr) {
-    if (xhr.readyState == 4 && xhr.status === 200) {
-        const response = JSON.parse(xhr.response);
-
-        if (response.success) {
+function odjava(err, data) {
+        
+        if(err){
+            const err = JSON.parse(err);
+            alert(err.poruka);
+            return;
+        }
+        const response = JSON.parse(data);
+        if (response.poruka == "Uspješna odjava") {
             window.location.href = 'http://localhost:3000/prijava.html';
             //window.location.replace("/predmet.html");
 
 
         } else {
-            alert(response.message);
+            alert(response.poruka);
 
         }
-    }
 }
 
 
-function getPredmeti1(xhr) {
-    if (xhr.readyState == 4 && xhr.status === 200) {
-        const response = xhr.response;
+function getPredmeti1(err, data) {
+    if(err){
+        const err = JSON.parse(err);
+        alert(err.poruka);
+        return;
+    }
 
-        if (response.success) {
+    const response = data;
+
+        if (response.greska == null) {
             let predmeti = response.predmeti;
 
             let lista = document.getElementById('listaPredmeta');
@@ -59,14 +67,18 @@ function getPredmeti1(xhr) {
             window.location.href = 'http://localhost:3000/prijava.html'
         }
 
-    }
+    
 }
 
-function getPredmet1(xhr) {
-    if (xhr.readyState == 4 && xhr.status === 200) {
-        const response = xhr.response;
+function getPredmet1(err, data) {
+    if(err){
+        const err = JSON.parse(err);
+        alert(err.poruka);
+        return;
+    }
+        const response = data;
 
-        if (response.success) {
+        if (response.poruka == null) {
             new TabelaPrisustvo(document.getElementById("tabela"), response.prisustvo);
             window.sljedecaSedmica = TabelaPrisustvo.sljedecaSedmica;
             window.prethodnaSedmica = TabelaPrisustvo.prethodnaSedmica;
@@ -99,4 +111,3 @@ function getPredmet1(xhr) {
         }
     }
 
-}
