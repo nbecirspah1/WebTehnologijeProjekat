@@ -202,14 +202,17 @@ new nacrtajTabelu(tekucaSedmica);
               kol.setAttribute("class", "vertikalno");
               kol.innerHTML = "P" + k;
               let kol1 = red1.appendChild(document.createElement('td'));
+              kol1.classList.add("nemaPrisustva", "predavanja");
               if( k <= podaci.prisustva[j].predavanja){
             //    kol1.setAttribute("class", "zelena");
-                  kol1.classList.add("zelena", "predavanja");
+                  kol1.classList.remove("nemaPrisustva");
+                  kol1.classList.add("zelena");
 
               }
               else if(podaci.prisustva[j].predavanja != null){
            //     kol1.setAttribute("class", "crvena");
-                  kol1.classList.add("crvena", "predavanja");
+                  kol1.classList.remove("nemaPrisustva");
+                  kol1.classList.add("crvena");
 
               }
            //   kol1.setAttribute("class", "predavanja");
@@ -220,13 +223,16 @@ new nacrtajTabelu(tekucaSedmica);
               kol.setAttribute("class", "vertikalno");
               kol.innerHTML = "V" + k;
               let kol1 = red1.appendChild(document.createElement('td'));
+              kol1.classList.add("nemaPrisustva", "vjezbe");
               if( k <= podaci.prisustva[j].vjezbe){
                // kol1.setAttribute("class", "zelena");
-                kol1.classList.add("zelena", "vjezbe");
+                kol1.classList.remove("nemaPrisustva");
+                kol1.classList.add("zelena");
               }
               else if(podaci.prisustva[j].vjezbe != null){
               //  kol1.setAttribute("class", "crvena");
-                kol1.classList.add("crvena", "vjezbe");
+                kol1.classList.remove("nemaPrisustva");
+                kol1.classList.add("crvena");
 
               }
            //   kol1.setAttribute("class", "vjezbe");
@@ -241,12 +247,15 @@ new nacrtajTabelu(tekucaSedmica);
                 kol.setAttribute("class", "vertikalno");
                 kol.innerHTML = "P" + k;
                 let kol1 = red1.appendChild(document.createElement('td'));
+                kol1.classList.add("nemaPrisustva", "predavanja");
+
                 }
               for(let k = 1; k <= podaci.brojVjezbiSedmicno; k++){
                 let kol = red.appendChild(document.createElement('td'));
                 kol.setAttribute("class", "vertikalno");
                 kol.innerHTML = "V" + k;
                 let kol1 = red1.appendChild(document.createElement('td'));
+                kol1.classList.add("nemaPrisustva", "vjezbe");
               
              }
              sedmica = sedmica + 1;
@@ -339,7 +348,120 @@ new nacrtajTabelu(tekucaSedmica);
         });
     }
 
+    let zeleneCelije = document.getElementsByClassName("zelena");
+
+    for (let i = 0; i < zeleneCelije.length; i++) {
+      zeleneCelije[i].addEventListener("click", function() {
+          console.log("USao u listenr od crv cel")
+          let nazivPredmeta = document.getElementById("nazivPredmeta");
+          let red = zeleneCelije[i].closest('tr');
+          let redChildren = red.children;
+          let red1 = red.previousElementSibling;
+          let index = red1.children[1];
+          let j = 0;
+          tdElements = red1.children;
+          
+          for(j = 2; j<tdElements.length; j++){
+              const td = tdElements[j];
+              if(tdElements[j].innerHTML.startsWith("P")) {
+                break;
+              }
+          }
+          let brojPredavanja = 0;
+          let brojVjezbi = 0;
+          let ind = 0;
+         
+          for(let k=j; k<tdElements.length; k++){
+            if(tdElements[k].innerHTML.startsWith("V") && redChildren[ind].classList.contains("zelena")){
+              brojVjezbi++;
+              
+  
+            }
+            else if(tdElements[k].innerHTML.startsWith("P") && redChildren[ind].classList.contains("zelena")){
+              brojPredavanja++;
+              
+  
+            }
+            ind++;
+          }
+          console.log("Broj pred", brojPredavanja);
+          console.log("Broj vj", brojVjezbi);
+  
+          if(zeleneCelije[i].classList.contains("predavanja")){
+              brojPredavanja--;
+          }
+          else{
+            brojVjezbi--;
+          }
+          console.log("Broj pred poslije", brojPredavanja);
+          console.log("Broj vj poslije", brojVjezbi);
+  
+          PoziviAjax.postPrisustvo(nazivPredmeta.innerHTML, index.innerHTML, {sedmica: j-1, predavanja: brojPredavanja, vjezbe: brojVjezbi }, postPrisustvo1)
+  
+      });
+  }
+  
+
+  let prazneCelije = document.getElementsByClassName("nemaPrisustva");
+  console.log("Prazne celije", prazneCelije);
+  console.log("Crvene celije", crveneCelije);
+
+  for (let i = 0; i < prazneCelije.length; i++) {
+    prazneCelije[i].addEventListener("click", function() {
+        console.log("USao u listenr od PRAZNE cel")
+        let nazivPredmeta = document.getElementById("nazivPredmeta");
+        let red = prazneCelije[i].closest('tr');
+        let redChildren = red.children;
+        let red1 = red.previousElementSibling;
+        let index = red1.children[1];
+        let j = 0;
+        tdElements = red1.children;
+        
+        for(j = 2; j<tdElements.length; j++){
+            const td = tdElements[j];
+            if(tdElements[j].innerHTML.startsWith("P")) {
+              break;
+            }
+        }
+        let brojPredavanja = 0;
+        let brojVjezbi = 0;
+        let ind = 0;
+       
+        for(let k=j; k<tdElements.length; k++){
+          if(tdElements[k].innerHTML.startsWith("V") && redChildren[ind].classList.contains("zelena")){
+            brojVjezbi++;
+            
+
+          }
+          else if(tdElements[k].innerHTML.startsWith("P") && redChildren[ind].classList.contains("zelena")){
+            brojPredavanja++;
+            
+
+          }
+          ind++;
+        }
+        console.log("Broj pred", brojPredavanja);
+        console.log("Broj vj", brojVjezbi);
+
+        if(prazneCelije[i].classList.contains("predavanja")){
+            brojPredavanja++;
+        }
+        else{
+          brojVjezbi++;
+        }
+        console.log("Broj pred poslije", brojPredavanja);
+        console.log("Broj vj poslije", brojVjezbi);
+
+        PoziviAjax.postPrisustvo(nazivPredmeta.innerHTML, index.innerHTML, {sedmica: j-1, predavanja: brojPredavanja, vjezbe: brojVjezbi }, postPrisustvo1)
+
+    });
+}
+
   } 
+
+
+
+ 
 
 
   function postPrisustvo1(xhr) {
