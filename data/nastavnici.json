@@ -2,7 +2,7 @@
     {
         "nastavnik": {
             "username": "USERNAME",
-            "password_hash": "PASSWORDHASH"
+            "password_hash": "$2b$10$bZJS1Fj0fponG1xskEjpVePY90PIl1hejq0TQhgfhWIbgr02NQFsW"
         },
         "predmeti": [
             "PREDMET1",
@@ -13,7 +13,7 @@
     {
         "nastavnik": {
             "username": "USERNAME2",
-            "password_hash": "PASSWORDHASH2"
+            "password_hash": "$2b$10$2DChEJym7lrvUC74zB/CwOocg/6v/ufPr4WkzX1lvWpo.J7hRbRXm"
         },
         "predmeti": [
             "PREDMET1"

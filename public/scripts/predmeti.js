@@ -52,6 +52,9 @@ function getPredmeti1(err, data) {
             }
             let button = document.createElement('button');
             lista.appendChild(button).innerHTML = 'Odjavite se';
+            let logoutIkona = button.appendChild(document.createElement('i'));
+            logoutIkona.setAttribute("class", "fa-solid fa-right-from-bracket");
+            logoutIkona.setAttribute("id", "logoutIkona");
             button.id = "logoutButton";
             button.addEventListener('click', e => {
                 e.preventDefault();
@@ -79,9 +82,10 @@ function getPredmet1(err, data) {
         const response = data;
 
         if (response.poruka == null) {
+            tekucaSedmica = 0;
             new TabelaPrisustvo(document.getElementById("tabela"), response.prisustvo);
-            window.sljedecaSedmica = TabelaPrisustvo.sljedecaSedmica;
-            window.prethodnaSedmica = TabelaPrisustvo.prethodnaSedmica;
+          //  window.sljedecaSedmica = prisustvo.sljedecaSedmica;
+            //window.prethodnaSedmica = prisustvo.prethodnaSedmica;
            // let crveneCelije = document.getElementsByClassName("crvena");
             // for (let i = 0; i < crveneCelije.length; i++) {
             //     crveneCelije[i].addEventListener("click", function() {

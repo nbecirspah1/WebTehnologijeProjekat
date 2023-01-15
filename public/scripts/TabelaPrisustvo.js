@@ -1,8 +1,8 @@
 
+let tekucaSedmica;
 let TabelaPrisustvo = function (divRef, podaci) {
   //let predavanja=0, vjezbe=0;
 
-  var tekucaSedmica = 0;
    
     
   var maxSedmica = 0;
@@ -59,15 +59,25 @@ let TabelaPrisustvo = function (divRef, podaci) {
       return 0;
     }
   }
-
+  if(tekucaSedmica == 0){
+    for (let i = 0; i < podaci.prisustva.length; i++) {//Nalazimo tekucu sedmicu
+      if (podaci.prisustva[i].sedmica > tekucaSedmica) {
+        
+          tekucaSedmica = podaci.prisustva[i].sedmica;
+        
+          maxSedmica = podaci.prisustva[i].sedmica;
+      }
+    }
+  }
   for (let i = 0; i < podaci.prisustva.length; i++) {//Nalazimo tekucu sedmicu
-    if (podaci.prisustva[i].sedmica > tekucaSedmica) {
+    if (podaci.prisustva[i].sedmica > maxSedmica) {
       
-        tekucaSedmica = podaci.prisustva[i].sedmica;
+        // tekucaSedmica = podaci.prisustva[i].sedmica;
       
         maxSedmica = podaci.prisustva[i].sedmica;
     }
   }
+
   let pronadjenaPrvasedmica = false;
   for (j = 1; j <= tekucaSedmica; j++) {
     let pronadjenaItasedmica = false;

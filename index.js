@@ -3,6 +3,7 @@ const path = require('path');
 const session = require('express-session');
 const app = express();
 const fs = require('fs');
+const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 
 app.use(express.static("public"));
@@ -19,6 +20,16 @@ app.use(session({
 }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+bcrypt.hash("sifra1", 10, function (err, hash) {
+    // hash šifre imate ovdje
+    console.log("Hash za ovu sifru1 je ", hash);
+    //$2b$10$bZJS1Fj0fponG1xskEjpVePY90PIl1hejq0TQhgfhWIbgr02NQFsW
+});
+bcrypt.hash("sifra2", 10, function (err, hash) {
+    // hash šifre imate ovdje
+    console.log("Hash za ovu sifru2 je ", hash);
+    //$2b$10$2DChEJym7lrvUC74zB/CwOocg/6v/ufPr4WkzX1lvWpo.J7hRbRXm
+});
 
 
 app.get('/predmeti', (req, res) => {
@@ -48,21 +59,37 @@ app.post('/login', (req, res) => {
         var nastavnik = null;
         // nastavnik=nastavnici.find(u => u.nastavnik.username === username 
         //      && u.nastavnik.password_hash === password);
+        let postojiUsername = false;
         for (const nastavnik of nastavnici) {
             // console.log(nastavnik);
             //  console.log("Ispisi usn", username);
-            if (nastavnik.nastavnik.username === username && nastavnik.nastavnik.password_hash === password) {
-                req.session.username = username;
-                req.session.predmeti = nastavnik.predmeti;
-                res.json({ poruka: 'Uspješna prijava' });
-                return;
+            let hash = nastavnik.nastavnik.password_hash;
+            if (nastavnik.nastavnik.username === username) {
+                postojiUsername = true;
+                bcrypt.compare(password, hash, function (err, success) {
+                    if (err) {
+                        console.log("Greska prilikom poredjenja hasha sa passwordom");
+                    } else {
+                        if (success) {
+                            console.log("uspjesnaPrijava")
+                            req.session.username = username;
+                            req.session.predmeti = nastavnik.predmeti;
+                            res.json({ poruka: 'Uspješna prijava' });
+                            return;
+                        } else {
+                            res.json({ poruka: 'Neuspješna prijava' });
+                            return;
+                        }
+                    }
+                })
+
+
+
             }
-           
-          
         }
-   
-            res.json({ poruka: 'Neuspješna prijava' });
-         
+        if(!postojiUsername){
+        res.json({ poruka: 'Neuspješna prijava' });
+        }
     });
 });
 
@@ -73,7 +100,7 @@ app.post('/logout', (req, res) => {
             res.json({ poruka: 'Neuspješna odjava' });
             return;
         }
-        res.json({poruka: 'Uspješna odjava' });
+        res.json({ poruka: 'Uspješna odjava' });
 
     })
 })
@@ -94,7 +121,7 @@ app.get('/predmet/:naziv', (req, res) => {
                 return;
             }
         }
-        res.json({  poruka: 'Ovaj predmet ne postoji' });
+        res.json({ poruka: 'Ovaj predmet ne postoji' });
 
     });
 });
@@ -131,9 +158,11 @@ app.post('/prisustvo/predmet/:naziv/student/:index', (req, res) => {
                         prisustvo.vjezbe = reqPrisustvo.vjezbe;
                     }
                 }
-                if(!postojiSedmicaSaPrisustvomZaIndeks){
-                    podaci.prisustva.push({"sedmica":reqPrisustvo.sedmica,"predavanja": reqPrisustvo.predavanja,
-                                            "vjezbe": reqPrisustvo.vjezbe,"index":index})
+                if (!postojiSedmicaSaPrisustvomZaIndeks) {
+                    podaci.prisustva.push({
+                        "sedmica": reqPrisustvo.sedmica, "predavanja": reqPrisustvo.predavanja,
+                        "vjezbe": reqPrisustvo.vjezbe, "index": index
+                    })
                 }
             }
         }
