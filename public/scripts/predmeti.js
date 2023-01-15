@@ -40,7 +40,7 @@ function getPredmeti1(err, data) {
 
             let lista = document.getElementById('listaPredmeta');
             for (let predmet of predmeti) {
-                let element = document.createElement('li')
+                let element = document.createElement('li');
                 lista.appendChild(element).innerHTML = predmet;
                 element.addEventListener('click', e => {
                     e.preventDefault();
@@ -83,33 +83,17 @@ function getPredmet1(err, data) {
 
         if (response.poruka == null) {
             tekucaSedmica = 0;
-            new TabelaPrisustvo(document.getElementById("tabela"), response.prisustvo);
-          //  window.sljedecaSedmica = prisustvo.sljedecaSedmica;
-            //window.prethodnaSedmica = prisustvo.prethodnaSedmica;
-           // let crveneCelije = document.getElementsByClassName("crvena");
-            // for (let i = 0; i < crveneCelije.length; i++) {
-            //     crveneCelije[i].addEventListener("click", function() {
-            //         console.log("USao u listenr od crv cel")
-            //         let nazivPredmeta = document.getElementById("nazivPredmeta");
-            //         let red = crveneCelije[i].closest('tr');
-            //         let red1 = red.previousElementSibling;
-            //         let index = red1.children[1];
-            //         //prisustvo ima oblik {sedmica:N,predavanja:P,vjezbe:V}
-            //         PoziviAjax.postPrisustvo(nazivPredmeta, index, )
-            //         console.log(red1);
-            //         let j = 0;
-            //         tdElements = red1.children;
-            //         for(j = 2; j<tdElements.length; j++){
-            //             const td = tdElements[j];
-            //             console.log(tdElements[j]);
-            //             if(tdElements[j].innerHTML.startsWith("P")) {
-            //               break;
-            //             }
-            //         }
-            //         console.log("Tekuca sedmica je ",  j-1);
-            //         //crveneCelije[i].className = "zelena";
-            //     });
-            // }
+            body = document.getElementById('body');
+            tabela = document.createElement('table');
+            tabela.setAttribute("id", "tabela")
+            body.appendChild(tabela);
+            // let link = document.createElement("link");
+            // link.rel = "stylesheet";
+            // link.type = "text/css";
+            // link.href = "../css/predmeti.css";
+            // let stariLink = document.getElementById("stariLink");
+            // document.head.replaceChild(link, stariLink);
+            new TabelaPrisustvo(document.getElementById("tabela"), response.prisustvo);      
         } else {
             alert(response.poruka);
         }

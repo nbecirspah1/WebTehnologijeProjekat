@@ -5,9 +5,18 @@ body {
     min-width: 300px;
     margin: auto;
   }
-  #myHeader>ul>li:hover, #logoutButton:hover{
+
+  
+   #logoutButton:hover{
     filter: brightness(200%); 
+    transform: scale(1.02);
+
     /* color: rgb(52, 172, 172); */
+
+}
+#myHeader>ul>li:hover{
+    filter: brightness(75%); 
+    transform: scale(1.02);
 
 }
   @media screen and (max-width: 800px) {
@@ -20,6 +29,26 @@ body {
     #myHeader>ul {
       list-style-type: none;
     }
+    #myHeader>ul>li {
+      list-style-type: none;
+      float: left;
+      color: darkslategrey;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+      background-color: rgb(154, 183, 222);
+      margin-left: 10px;
+      margin-right: 10px;
+      /* filter: brightness(170%);  */
+
+
+    }
+  
   }
   
   @media screen and (min-width: 800px) {
@@ -39,8 +68,19 @@ body {
     #myHeader>ul>li {
       list-style-type: none;
       float: left;
-      padding: 20px;
+      color: darkslategrey;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      transition: all 0.2s ease-in-out;
       cursor: pointer;
+      background-color: rgb(154, 183, 222);
+      /* filter: brightness(170%);  */
+      margin-left: 10px;
+      margin-right: 10px;
 
     }
   
@@ -63,6 +103,7 @@ body {
     cursor: pointer;
     font-size: 1em;
     float: right;
+    transition: all 0.2s ease-in-out;
    
     /* float: top; */
 }
