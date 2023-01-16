@@ -479,24 +479,24 @@ let TabelaPrisustvo = function (divRef, podaci) {
 
 
 
-  function postPrisustvo1(xhr) {
-    if (xhr.readyState == 4 && xhr.status === 200) {
-      const response = JSON.parse(xhr.response);
-      console.log("Evo me u postPrisustvo1", response.success);
-      console.log("Proslijedjeni podaci", response.prisustvo);
-      if (response.success) {
-        new TabelaPrisustvo(document.getElementById("tabela"), response.prisustvo);
-        // new nacrtajTabelu(tekucaSedmica, response.prisustvo);
+  // function postPrisustvo1(xhr) {
+  //   if (xhr.readyState == 4 && xhr.status === 200) {
+  //     const response = JSON.parse(xhr.response);
+  //     console.log("Evo me u postPrisustvo1", response.success);
+  //     console.log("Proslijedjeni podaci", response.prisustvo);
+  //     if (response.success) {
+  //       new TabelaPrisustvo(document.getElementById("tabela"), response.prisustvo);
+  //       // new nacrtajTabelu(tekucaSedmica, response.prisustvo);
 
-        //    window.sljedecaSedmica = TabelaPrisustvo.sljedecaSedmica;
-        //  window.prethodnaSedmica = TabelaPrisustvo.prethodnaSedmica;
+  //       //    window.sljedecaSedmica = TabelaPrisustvo.sljedecaSedmica;
+  //       //  window.prethodnaSedmica = TabelaPrisustvo.prethodnaSedmica;
 
-      } else {
-        alert(response.poruka);
-      }
-    }
+  //     } else {
+  //       alert(response.poruka);
+  //     }
+  //   }
 
-  }
+  // }
 
 
   new nacrtajTabelu(tekucaSedmica);
