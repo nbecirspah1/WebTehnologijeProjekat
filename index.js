@@ -5,7 +5,13 @@ const app = express();
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
-
+const db = require('./db.js');
+const nastavnici = require('./models/nastavnici.js');
+const predmeti = require('./models/predmeti.js');
+const prisustva = require('./models/prisustva.js');
+const studenti = require('./models/studenti.js');
+//db.sequelize.sync({force:true});
+//sequelize.sync({force:true})
 app.use(express.static("public"));
 app.use(express.static("public/html"));
 app.use(express.static("public/css"));
@@ -87,8 +93,8 @@ app.post('/login', (req, res) => {
 
             }
         }
-        if(!postojiUsername){
-        res.json({ poruka: 'Neuspješna prijava' });
+        if (!postojiUsername) {
+            res.json({ poruka: 'Neuspješna prijava' });
         }
     });
 });
