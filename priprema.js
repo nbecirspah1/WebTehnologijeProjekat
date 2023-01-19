@@ -34,10 +34,10 @@ function inicijalizacija(){
         prisustvaListaPromisea.push(db.prisustva.create({sedmica: 2, predavanja: 2, vjezbe:2}))//PREDMET4
         prisustvaListaPromisea.push(db.prisustva.create({sedmica: 2, predavanja: 2, vjezbe:2}))//PREDMET4
 
-        prisustvaListaPromisea.push(db.prisustva.create({sedmica: 1, predavanja: 2, vjezbe:2}))//PREDMET5
+        // prisustvaListaPromisea.push(db.prisustva.create({sedmica: 1, predavanja: 2, vjezbe:2}))//PREDMET5
         prisustvaListaPromisea.push(db.prisustva.create({sedmica: 1, predavanja: 0, vjezbe:0}))//PREDMET5
         prisustvaListaPromisea.push(db.prisustva.create({sedmica: 2, predavanja: 2, vjezbe:2}))//PREDMET5
-        prisustvaListaPromisea.push(db.prisustva.create({sedmica: 2, predavanja: 2, vjezbe:2}))//PREDMET5
+        // prisustvaListaPromisea.push(db.prisustva.create({sedmica: 2, predavanja: 2, vjezbe:2}))//PREDMET5
 
         Promise.all(prisustvaListaPromisea).then(function(prisustva){
             var prisustvoZaP1 = [prisustva.filter(function(p){return p.id===1})[0],
@@ -57,9 +57,10 @@ function inicijalizacija(){
                                  prisustva.filter(function(p){return p.id===15})[0],
                                  prisustva.filter(function(p){return p.id===16})[0]];
             var prisustvoZaP5 = [prisustva.filter(function(p){return p.id===17})[0],
-                                 prisustva.filter(function(p){return p.id===18})[0],
-                                 prisustva.filter(function(p){return p.id===19})[0],
-                                 prisustva.filter(function(p){return p.id===20})[0]];
+                                 prisustva.filter(function(p){return p.id===18})[0]
+                                //  prisustva.filter(function(p){return p.id===19})[0],
+                                //  prisustva.filter(function(p){return p.id===20})[0]
+                                ];
 
 
         predmetiListaPromisea.push(
@@ -125,7 +126,8 @@ function inicijalizacija(){
                                         prisustvoZaP2[0], prisustvoZaP2[2],
                                         prisustvoZaP3[0], prisustvoZaP3[2],
                                         prisustvoZaP4[0], prisustvoZaP4[2],
-                                        prisustvoZaP5[0], prisustvoZaP5[2]],)
+                                        prisustvoZaP5[0]//, prisustvoZaP5[1]
+                                    ])
                 return new Promise(function(resolve,reject){resolve(n);});
                 
             })
@@ -136,7 +138,8 @@ function inicijalizacija(){
                                         prisustvoZaP2[1], prisustvoZaP2[3],
                                         prisustvoZaP3[1], prisustvoZaP3[3],
                                         prisustvoZaP4[1], prisustvoZaP4[3],
-                                        prisustvoZaP5[1], prisustvoZaP5[3]])
+                                        prisustvoZaP5[1]//, prisustvoZaP5[3]
+                                    ])
                 return new Promise(function(resolve,reject){resolve(n);});
                 
             })

@@ -211,7 +211,7 @@ app.post('/prisustvo/predmet/:naziv/student/:index', (req, res) => {
                 var prisustvoPredmeta= {};
 
                 console.log("PRIKAZI MI SVE PARAMETRE ZA POST", nazivPredmeta, index, reqPrisustvo)
-                db.prisustva.update({predavanja: reqPrisustvo.predavanja,
+               return db.prisustva.update({predavanja: reqPrisustvo.predavanja,
                                      vjezbe: reqPrisustvo.vjezbe},
                                      {where:{[Op.and] :[ {studentiIndeks : index},
                                                          {sedmica: reqPrisustvo.sedmica},
@@ -219,16 +219,34 @@ app.post('/prisustvo/predmet/:naziv/student/:index', (req, res) => {
                         function(updatePrisustva){
                            // console.log("Update ovh prisustva je ", updatePrisustva);
                           //  res.json({ success: true, prisustvo: prisustvoPredmeta });
-                          if(updatePrisustva==0){console.log("Greska pri unosu prisustva")}
-                            db.prisustva.findAll({where:{[Op.and] :[ 
-                        //    {sedmica: reqPrisustvo.sedmica},
-                            {predmetiId: predmet.id}]}}).then(
+                            let promise ;
+                            if (updatePrisustva[0] === 0) {
+                               promise= db.prisustva.create({
+                                  studentiIndeks: index,
+                                  sedmica: reqPrisustvo.sedmica,
+                                  predmetiId: predmet.id,
+                                  predavanja: reqPrisustvo.predavanja,
+                                  vjezbe: reqPrisustvo.vjezbe
+                                }).then(() => {
+                                  console.log('NOVO PRISUSTVO.');
+                                   return db.prisustva.findAll({where:{[Op.and] :[ 
+                                    //    {sedmica: reqPrisustvo.sedmica},
+                                        {predmetiId: predmet.id}]}})
+                                       
+                                });
+                              }else{
+                                promise= db.prisustva.findAll({where:{[Op.and] :[ 
+                                    //    {sedmica: reqPrisustvo.sedmica},
+                                        {predmetiId: predmet.id}]}})
+                              }
+                          
+                            return promise.then(
                                 function(prisustva){
                                     var indeksi = [];
                                     for(const pris of prisustva){
                                         indeksi.push(pris.studentiIndeks)
                                     }
-                                    db.studenti.findAll({where:{indeks:{[Op.or]:indeksi}}}).then(
+                                  return  db.studenti.findAll({where:{indeks:{[Op.or]:indeksi}}}).then(
                                         function(studenti){
 
                                             prisustvoPredmeta.predmet = predmet.predmet;
