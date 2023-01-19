@@ -62,6 +62,12 @@ app.post('/login',  (req, res) => {
     }).then(function(nastavnici){
         //console.log(nastavnici);
         //console.log("Predmeti nastavnika: ", nastavnici.getPredmetiNastavnika())
+        console.log(nastavnici)
+        if(nastavnici == null || nastavnici.password_hash == null){
+            res.json({ poruka: 'Neuspješna prijava' });
+            return;
+        }
+
         bcrypt.compare(password, nastavnici.password_hash, function (err, success) {
             if (err) {
                 console.log("Greska prilikom poredjenja hasha sa passwordom");
@@ -134,109 +140,125 @@ app.get('/predmet/:naziv', (req, res) => {
                 //prisustvo.prisustva = prisustva;
                 var nizPrisustva = [];
                 var i =0;
+                var indeksi = []
                 for(const pr of prisustva ){
                     nizPrisustva.push({ "sedmica": pr.sedmica,
                                         "predavanja": pr.predavanja,
                                         "vjezbe": pr.vjezbe,
                                         "index": pr.studentiIndeks});
-                                        var nizStudenata = [];
+                                        
                      
                      duzinaPrisustva=prisustva.length;   
-                    db.studenti.findOne({where: {indeks: pr.studentiIndeks}}).then(
+                     indeksi.push(pr.studentiIndeks)
+                //     db.studenti.findOne({where: {indeks: pr.studentiIndeks}}).then(
                         
 
-                        function(student){
-                            i++;
-                           let vecPostoji = false;
-                            for(const s of nizStudenata){
-                                if(s.index===student.indeks){
-                                    vecPostoji = true;
-                                }
-                            }
-                            if(!vecPostoji){
-                                nizStudenata.push({"ime": student.ime, "index": student.indeks});
-                            }
+                //         function(student){
+                //             i++;
+                //            let vecPostoji = false;
+                //             for(const s of nizStudenata){
+                //                 if(s.index===student.indeks){
+                //                     vecPostoji = true;
+                //                 }
+                //             }
+                //             if(!vecPostoji){
+                //                 nizStudenata.push({"ime": student.ime, "index": student.indeks});
+                //             }
                          
                     
-                            prisustvo.studenti = nizStudenata;
-                console.log("EEEEVO ME OPET ISPISI PRISUSTVA ZA PREDMET", prisustvo);
-                console.log("Ispisi i", i);
-                console.log("Ispisi duzinsPr", duzinaPrisustva);
-                            if(i==duzinaPrisustva){console.log("USAO U RES.JSON");res.json({prisustvo: prisustvo});}
+                //            // prisustvo.studenti = nizStudenata;
+                //             let sortiraniNizStudenata = [...nizStudenata].sort((a,b) => b.indeks - a.indeks);
+                //             prisustvo.studenti = sortiraniNizStudenata;
+                // console.log("EEEEVO ME OPET ISPISI PRISUSTVA ZA PREDMET", prisustvo);
+                // console.log("Ispisi i", i);
+                // console.log("Ispisi duzinsPr", duzinaPrisustva);
+                //             if(i==duzinaPrisustva){console.log("USAO U RES.JSON");res.json({prisustvo: prisustvo});}
 
-                    })
+                //     })
 
                     
                     
                 }
+                var nizStudenata = [];
+                db.studenti.findAll({where:{indeks:{[Op.or]:indeksi}}}).then(
+                    function(studenti){
+                //prisustvo.prisustva = nizPrisustva;
+                        for(const s of studenti){
+                            nizStudenata.push({ime: s.ime, index: s.indeks});
+                        }
                 prisustvo.prisustva = nizPrisustva;
-                
-
+                prisustvo.studenti = nizStudenata
+                console.log("USAO U RES.JSON", prisustvo);res.json({prisustvo: prisustvo});
         
             }
         )
       
     })
 });
+});
 
 app.post('/prisustvo/predmet/:naziv/student/:index', (req, res) => {
-    const nazivPredmeta = req.params.naziv;
-    const index = req.params.index;
-    const reqPrisustvo = req.body;
+    var nazivPredmeta = req.params.naziv;
+    var index = req.params.index;
+    var reqPrisustvo = req.body;
     //  console.log("Sedmica koja se salje u req.body", req.body.sedmica);
     //console.log("Vjezbe u req", req.body.predavanja);
     //console.log("Predavanja u req", req.body.vjezbe);
-    fs.readFile('data/prisustva.json', 'utf-8', (err, data) => {
-        if (err) {
-            console.error(err);
-            res.json({ success: false, poruka: 'Prisustvo se ne moze azurirati' });
+        let promise1 = db.predmeti.findOne({where: {predmet: nazivPredmeta}});
 
-            return;
-        }
-        var prisustva = JSON.parse(data);
-        for (let podaci of prisustva) {
+        promise1.then(
+            function(predmet){
+                var prisustvoPredmeta= {};
 
-            if (podaci.predmet === nazivPredmeta) {
+                console.log("PRIKAZI MI SVE PARAMETRE ZA POST", nazivPredmeta, index, reqPrisustvo)
+                db.prisustva.update({predavanja: reqPrisustvo.predavanja,
+                                     vjezbe: reqPrisustvo.vjezbe},
+                                     {where:{[Op.and] :[ {studentiIndeks : index},
+                                                         {sedmica: reqPrisustvo.sedmica},
+                                                         {predmetiId: predmet.id}]}}).then(
+                        function(updatePrisustva){
+                           // console.log("Update ovh prisustva je ", updatePrisustva);
+                          //  res.json({ success: true, prisustvo: prisustvoPredmeta });
+                          if(updatePrisustva==0){console.log("Greska pri unosu prisustva")}
+                            db.prisustva.findAll({where:{[Op.and] :[ 
+                        //    {sedmica: reqPrisustvo.sedmica},
+                            {predmetiId: predmet.id}]}}).then(
+                                function(prisustva){
+                                    var indeksi = [];
+                                    for(const pris of prisustva){
+                                        indeksi.push(pris.studentiIndeks)
+                                    }
+                                    db.studenti.findAll({where:{indeks:{[Op.or]:indeksi}}}).then(
+                                        function(studenti){
 
-                let postojiSedmicaSaPrisustvomZaIndeks = false;
+                                            prisustvoPredmeta.predmet = predmet.predmet;
+                                            prisustvoPredmeta.brojPredavanjaSedmicno=predmet.brojPredavanjaSedmicno;
+                                            prisustvoPredmeta.brojVjezbiSedmicno= predmet.brojVjezbiSedmicno;
+                                            var nizStudenata = []
+                                            for(const s of studenti){
+                                                nizStudenata.push({ime:s.ime, index:s.indeks})
+                                            }
+                                            prisustvoPredmeta.studenti= nizStudenata;
+                                            //prisustvoPredmeta.prisustvo=prisustva;
+                                            var nizPrisustva = [];
+                                            console.log("  EVO PRISUSTVA", prisustva)
+                                            for(const p of prisustva){
+                                                nizPrisustva.push({sedmica: p.sedmica, 
+                                                                predavanja: p.predavanja,
+                                                                vjezbe: p.vjezbe,
+                                                                index: p.studentiIndeks})
+                                            }
+                                            prisustvoPredmeta.prisustva=nizPrisustva;
 
-                for (let prisustvo of podaci.prisustva) {
-                    //{sedmica:N,predavanja:P,vjezbe:V}
-                    if (reqPrisustvo.sedmica == prisustvo.sedmica && index == prisustvo.index) {
-
-                        postojiSedmicaSaPrisustvomZaIndeks = true;
-                        console.log("Prisustvo na pred prije azuriranja: ", prisustvo.predavanja);
-                        prisustvo.predavanja = reqPrisustvo.predavanja;
-                        console.log("Prisustvo na pred poslije azuriranja: ", prisustvo.predavanja);
-                        prisustvo.vjezbe = reqPrisustvo.vjezbe;
-                    }
-                }
-                if (!postojiSedmicaSaPrisustvomZaIndeks) {
-                    podaci.prisustva.push({
-                        "sedmica": reqPrisustvo.sedmica, "predavanja": reqPrisustvo.predavanja,
-                        "vjezbe": reqPrisustvo.vjezbe, "index": index
-                    })
-                }
+                                            console.log("ZZDRAVO PRISUSTVO PREDMETA", prisustvoPredmeta)
+                                            res.json({success: true,prisustvo: prisustvoPredmeta})
+                                        }
+                                    )
+                            })
+                        }
+                    ).catch(function(err){console.log("ERROR ZA POSTAVLJANJE PRISUSTTVA", err)})
             }
-        }
-        fs.writeFile('data/prisustva.json', JSON.stringify(prisustva), (err) => {
-            if (err) {
-                console.error(err);
-            } else {
-                console.log("Upisani podaci");
-                for (prisustvoPredmeta of prisustva) {
-                    if (prisustvoPredmeta.predmet === nazivPredmeta) {
-                        res.json({ success: true, prisustvo: prisustvoPredmeta });
-                        console.log(prisustvoPredmeta);
-                    }
-                }
-            }
-        });
-
-    });
-
-
-
+        )
 });
 
 
