@@ -10,6 +10,7 @@ const nastavnici = require('./models/nastavnici.js');
 const predmeti = require('./models/predmeti.js');
 const prisustva = require('./models/prisustva.js');
 const studenti = require('./models/studenti.js');
+const { Op } = require("sequelize");
 //db.sequelize.sync({force:true});
 //sequelize.sync({force:true})
 app.use(express.static("public"));
@@ -25,6 +26,8 @@ app.use(session({
     saveUninitialized: true
 }));
 app.use(bodyParser.urlencoded({ extended: true }));
+
+db.sequelize.sync();
 
 bcrypt.hash("sifra1", 10, function (err, hash) {
     // hash šifre imate ovdje
@@ -49,54 +52,52 @@ app.get('/predmeti', (req, res) => {
 })
 
 
-app.post('/login', (req, res) => {
-    fs.readFile('data/nastavnici.json', 'utf-8', (err, data) => {
-        if (err) {
-            console.error(err);
-            res.json({ poruka: 'An error occurred' });
-
-            return;
+app.post('/login',  (req, res) => {
+    const username = req.body.data.username;
+    const password = req.body.data.password;
+    db.nastavnici.findOne({
+        where:{
+             username: username
         }
-
-        //const {username, password} = req.body.data;
-        const username = req.body.data.username;
-        const password = req.body.data.password;
-        const nastavnici = JSON.parse(data);
-        var nastavnik = null;
-        // nastavnik=nastavnici.find(u => u.nastavnik.username === username 
-        //      && u.nastavnik.password_hash === password);
-        let postojiUsername = false;
-        for (const nastavnik of nastavnici) {
-            // console.log(nastavnik);
-            //  console.log("Ispisi usn", username);
-            let hash = nastavnik.nastavnik.password_hash;
-            if (nastavnik.nastavnik.username === username) {
-                postojiUsername = true;
-                bcrypt.compare(password, hash, function (err, success) {
-                    if (err) {
-                        console.log("Greska prilikom poredjenja hasha sa passwordom");
-                    } else {
-                        if (success) {
-                            console.log("uspjesnaPrijava")
-                            req.session.username = username;
-                            req.session.predmeti = nastavnik.predmeti;
-                            res.json({ poruka: 'Uspješna prijava' });
-                            return;
-                        } else {
+    }).then(function(nastavnici){
+        //console.log(nastavnici);
+        //console.log("Predmeti nastavnika: ", nastavnici.getPredmetiNastavnika())
+        bcrypt.compare(password, nastavnici.password_hash, function (err, success) {
+            if (err) {
+                console.log("Greska prilikom poredjenja hasha sa passwordom");
+            } else {
+                if (success) {
+                    console.log("uspjesnaPrijava")
+                    req.session.username = username;
+                     db.predmeti.findAll({where:{nastavniciId: nastavnici.id}}).then(function(predmeti){
+                        // console.log(predmeti.predmet);
+                        if(predmeti.length == 0 ){
                             res.json({ poruka: 'Neuspješna prijava' });
                             return;
                         }
-                    }
-                })
-
-
-
+                        var naziviPredmeta = [];
+                        for(const predmet of predmeti){
+                            naziviPredmeta.push(predmet.predmet);
+                        }
+                        req.session.predmeti =naziviPredmeta;
+                        console.log(naziviPredmeta)
+                        res.json({ poruka: 'Uspješna prijava' });
+                     })
+                   // console.log("Predmeti nastavnika: ", nastavnici.getPredmetiNastavnika())
+                    
+                  //  return new Promise(function(resolve,reject){resolve(nastavnici);});
+                    
+                    //return;
+                } else {
+                    res.json({ poruka: 'Neuspješna prijava' });
+                    return;
+                }
             }
-        }
-        if (!postojiUsername) {
-            res.json({ poruka: 'Neuspješna prijava' });
-        }
-    });
+            
+
+        })
+
+    })
 });
 
 app.post('/logout', (req, res) => {
@@ -113,23 +114,69 @@ app.post('/logout', (req, res) => {
 
 app.get('/predmet/:naziv', (req, res) => {
     const nazivPredmeta = req.params.naziv;
-    fs.readFile('data/prisustva.json', 'utf-8', (err, data) => {
-        if (err) {
-            console.error(err);
-            res.json({ poruka: 'Predmet se ne moze ucitati' });
-
-            return;
+    var prisustvo = {};
+    var indeksi = []
+    db.predmeti.findOne({
+        where:{
+             predmet: nazivPredmeta
         }
-        const prisustva = JSON.parse(data);
-        for (const prisustvo of prisustva) {
-            if (prisustvo.predmet === nazivPredmeta) {
-                res.json({ prisustvo: prisustvo });
-                return;
+    }).then(function(predmeti){
+        prisustvo.predmet = predmeti.predmet;
+        prisustvo.brojPredavanjaSedmicno = predmeti.brojPredavanjaSedmicno;
+        prisustvo.brojVjezbiSedmicno = predmeti.brojVjezbiSedmicno;
+        console.log("HEJ EVO ME P BRP BRV", prisustvo);
+        db.prisustva.findAll({where: {predmetiId: predmeti.id}}).then(
+            function(prisustva){
+                if(prisustva.length == 0){
+                    res.json({ poruka: 'Ovaj predmet ne postoji' });
+                    return;
+                }
+                //prisustvo.prisustva = prisustva;
+                var nizPrisustva = [];
+                var i =0;
+                for(const pr of prisustva ){
+                    nizPrisustva.push({ "sedmica": pr.sedmica,
+                                        "predavanja": pr.predavanja,
+                                        "vjezbe": pr.vjezbe,
+                                        "index": pr.studentiIndeks});
+                                        var nizStudenata = [];
+                     
+                     duzinaPrisustva=prisustva.length;   
+                    db.studenti.findOne({where: {indeks: pr.studentiIndeks}}).then(
+                        
+
+                        function(student){
+                            i++;
+                           let vecPostoji = false;
+                            for(const s of nizStudenata){
+                                if(s.index===student.indeks){
+                                    vecPostoji = true;
+                                }
+                            }
+                            if(!vecPostoji){
+                                nizStudenata.push({"ime": student.ime, "index": student.indeks});
+                            }
+                         
+                    
+                            prisustvo.studenti = nizStudenata;
+                console.log("EEEEVO ME OPET ISPISI PRISUSTVA ZA PREDMET", prisustvo);
+                console.log("Ispisi i", i);
+                console.log("Ispisi duzinsPr", duzinaPrisustva);
+                            if(i==duzinaPrisustva){console.log("USAO U RES.JSON");res.json({prisustvo: prisustvo});}
+
+                    })
+
+                    
+                    
+                }
+                prisustvo.prisustva = nizPrisustva;
+                
+
+        
             }
-        }
-        res.json({ poruka: 'Ovaj predmet ne postoji' });
-
-    });
+        )
+      
+    })
 });
 
 app.post('/prisustvo/predmet/:naziv/student/:index', (req, res) => {

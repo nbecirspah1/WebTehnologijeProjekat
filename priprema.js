@@ -119,7 +119,7 @@ function inicijalizacija(){
             )
 
         }).catch(function(err){console.log("Predmeti greska "+err);});   
-        studentiListaPromisea.push(
+                studentiListaPromisea.push(
             db.studenti.create({ime:'Nejla Becirspahic', indeks: 18835}).then(function(n){
                 n.setPrisustvoStudenta([prisustvoZaP1[0], prisustvoZaP1[2],
                                         prisustvoZaP2[0], prisustvoZaP2[2],
